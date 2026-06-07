@@ -8,23 +8,80 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --rose:       #e8437a;
-      --rose-dim:   #b83360;
-      --rose-faint: #2a1520;
+      /* Thème par défaut (Gris/Rose) */
+      --primary: #2a2a2a;
+      --secondary: #e8437a;
+      --secondary-dim: #b83360;
+      --secondary-faint: #2a1520;
       --bg0: #1e1e1e;
       --bg1: #2a2a2a;
       --bg2: #333333;
       --bg3: #3a3a3a;
       --bg4: #444444;
       --line: #505050;
-      --text:     #f0f0f0;
+      --text: #f0f0f0;
       --text-mid: #b0b0b0;
       --text-dim: #707070;
       --radius: 4px;
       --green: #3ba55d;
       --red: #e8437a;
+      --blue: #4a90e2;
+      --orange: #f0a500;
+      --cyan: #00d4ff;
+      --purple: #9b59b6;
+      --pink: #ff6b9d;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    /* Thème Noir/Violet */
+    .theme-dark-purple {
+      --primary: #121212;
+      --secondary: #9b59b6;
+      --secondary-dim: #7a4296;
+      --secondary-faint: #1a0a20;
+      --bg0: #0a0a0a;
+      --bg1: #121212;
+      --bg2: #1e1e1e;
+      --bg3: #252525;
+      --bg4: #2d2d2d;
+      --line: #3a3a3a;
+    }
+    
+    /* Thème Noir/Vert */
+    .theme-dark-green {
+      --primary: #121212;
+      --secondary: #3ba55d;
+      --secondary-dim: #2d8a47;
+      --secondary-faint: #0a2010;
+      --bg0: #0a0a0a;
+      --bg1: #121212;
+      --bg2: #1e1e1e;
+      --bg3: #252525;
+      --bg4: #2d2d2d;
+      --line: #3a3a3a;
+    }
+    
+    /* Thème Noir/Bleu */
+    .theme-dark-blue {
+      --primary: #121212;
+      --secondary: #4a90e2;
+      --secondary-dim: #3a70b8;
+      --secondary-faint: #0a1a30;
+      --bg0: #0a0a0a;
+      --bg1: #121212;
+      --bg2: #1e1e1e;
+      --bg3: #252525;
+      --bg4: #2d2d2d;
+      --line: #3a3a3a;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       height: 100vh;
       background: var(--bg0);
@@ -32,327 +89,1437 @@
       font-family: 'Poppins', sans-serif;
       display: flex;
       overflow: hidden;
+      transition: background 0.3s ease, color 0.3s ease;
     }
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 2px; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg2);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--secondary), var(--purple));
+      border-radius: 4px;
+      border: 2px solid var(--bg2);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--secondary-dim), var(--purple));
+    }
 
     /* SIDEBAR */
     .sidebar {
-      width: 260px; min-width: 260px;
+      width: 260px;
+      min-width: 260px;
       background: var(--bg1);
       border-right: 1px solid var(--line);
-      display: flex; flex-direction: column;
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
     }
+
     .sidebar-header {
-      padding: 18px 16px 14px;
+      padding: 12px 16px;
       border-bottom: 1px solid var(--line);
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(90deg, var(--bg1), var(--bg2));
     }
-    .sidebar-header h1 {
-      font-size: 1.1rem; font-weight: 700;
-      color: var(--rose); letter-spacing: -0.02em;
-      display: flex; align-items: center; gap: 6px;
+
+    .server-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .sidebar-header h1 span { color: var(--text-mid); font-weight: 400; font-size: 0.8rem; }
+
+    .server-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg4);
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-mid);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .server-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .server-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .theme-selector {
+      position: relative;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .theme-selector .theme-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+    }
+
+    .theme-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 8px;
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 8px;
+      min-width: 180px;
+      display: none;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .theme-dropdown.active {
+      display: block;
+    }
+
+    .theme-option {
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s ease;
+    }
+
+    .theme-option:hover {
+      background: var(--bg3);
+    }
+
+    .theme-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+
+    .theme-name {
+      font-size: 0.75rem;
+      color: var(--text);
+    }
+
     .btn-icon {
-      width: 28px; height: 28px;
-      border: 1px solid var(--line); border-radius: var(--radius);
-      background: transparent; color: var(--text-mid);
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      font-size: 0.85rem; font-family: 'Poppins', sans-serif;
-      transition: border-color .15s, color .15s;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--text-mid);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.2s ease;
     }
-    .btn-icon:hover { border-color: var(--rose); color: var(--rose); }
+
+    .btn-icon:hover {
+      border-color: var(--secondary);
+      color: var(--secondary);
+      box-shadow: 0 0 8px rgba(155, 89, 182, 0.3);
+    }
 
     /* SIDEBAR SCROLL AREA */
     .sidebar-body {
-      flex: 1; overflow-y: auto; display: flex; flex-direction: column;
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
     }
 
-    .profiles-section { padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .profiles-section {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
     .section-label {
-      font-size: 0.7rem; letter-spacing: .12em; text-transform: uppercase;
-      color: var(--text-dim); padding: 0 16px 8px;
-      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 0 16px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
+
     .section-label-count {
-      background: var(--bg3); border: 1px solid var(--line);
-      color: var(--text-mid); font-size: 0.6rem; padding: 1px 6px; border-radius: 10px;
+      background: var(--bg3);
+      border: 1px solid var(--line);
+      color: var(--text-mid);
+      font-size: 0.6rem;
+      padding: 1px 6px;
+      border-radius: 10px;
     }
-    .profile-list { display: flex; flex-direction: column; gap: 2px; padding: 0 8px; }
+
+    .profile-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 0 8px;
+    }
 
     /* PROFILE CARD */
     .profile-card {
-      border: 1px solid var(--line); border-radius: var(--radius);
-      background: var(--bg2); overflow: hidden; margin-bottom: 2px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg2);
+      overflow: hidden;
+      margin-bottom: 2px;
+      transition: all 0.2s ease;
     }
-    .profile-card.active { border-color: var(--rose-dim); background: var(--rose-faint); }
+
+    .profile-card:hover {
+      background: var(--bg3);
+    }
+
+    .profile-card.active {
+      border-color: var(--secondary-dim);
+      background: linear-gradient(90deg, var(--secondary-faint), var(--bg2));
+    }
+
     .profile-card-header {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px 10px; cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
     }
+
     .profile-avatar {
-      width: 28px; height: 28px; border-radius: 2px;
-      background: var(--bg4); border: 1px solid var(--line);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 0.75rem; color: var(--text-mid);
-      flex-shrink: 0; overflow: hidden;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg4);
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--text-mid);
+      flex-shrink: 0;
+      overflow: hidden;
+      transition: all 0.2s ease;
     }
-    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; }
-    .profile-card.active .profile-avatar { background: var(--rose-faint); border-color: var(--rose-dim); color: var(--rose); }
-    .profile-info { flex: 1; min-width: 0; }
-    .profile-name { font-size: 0.8rem; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .profile-card.active .profile-name { color: var(--rose); }
-    .profile-meta { font-size: 0.65rem; color: var(--text-dim); display: flex; align-items: center; gap: 4px; margin-top: 1px; }
-    .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-dim); flex-shrink: 0; }
-    .dot.on { background: var(--green); }
-    .dot.err { background: var(--rose); }
-    .profile-toggle { font-size: 0.7rem; color: var(--text-dim); padding: 2px 4px; cursor: pointer; flex-shrink: 0; }
+
+    .profile-card.active .profile-avatar {
+      border-color: var(--secondary);
+      box-shadow: 0 0 8px rgba(155, 89, 182, 0.5);
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .profile-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .profile-name {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .profile-card.active .profile-name {
+      color: var(--secondary);
+    }
+
+    .profile-meta {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 1px;
+    }
+
+    .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--text-dim);
+      flex-shrink: 0;
+    }
+
+    .dot.on {
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+    }
+
+    .dot.err {
+      background: var(--secondary);
+      box-shadow: 0 0 6px var(--secondary);
+    }
+
+    .profile-toggle {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      padding: 2px 4px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
     .profile-card-actions {
-      display: flex; gap: 4px; padding: 0 10px 6px;
-      opacity: 0; height: 0; overflow: hidden; transition: opacity .15s, height .15s;
+      display: flex;
+      gap: 4px;
+      padding: 0 10px 6px;
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+      transition: opacity 0.15s, height 0.15s;
     }
-    .profile-card.expanded .profile-card-actions { opacity: 1; height: 28px; }
-    .token-list { border-top: 1px solid var(--line); max-height: 0; overflow: hidden; transition: max-height .2s ease; }
-    .profile-card.expanded .token-list { max-height: 300px; overflow-y: auto; }
-    .token-row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-bottom: 1px solid var(--line); }
-    .token-row:last-child { border-bottom: none; }
+
+    .profile-card.expanded .profile-card-actions {
+      opacity: 1;
+      height: 28px;
+    }
+
+    .token-list {
+      border-top: 1px solid var(--line);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease;
+    }
+
+    .profile-card.expanded .token-list {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .token-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--line);
+      transition: background 0.2s ease;
+    }
+
+    .token-row:hover {
+      background: var(--bg3);
+    }
+
+    .token-row:last-child {
+      border-bottom: none;
+    }
+
     .token-avatar {
-      width: 20px; height: 20px; border-radius: 2px;
-      background: var(--bg4); border: 1px solid var(--line);
-      flex-shrink: 0; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.65rem; font-weight: 700; color: var(--text-dim);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--bg4);
+      border: 1px solid var(--line);
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-dim);
     }
-    .token-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .token-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-dim); flex-shrink: 0; }
-    .token-dot.on { background: var(--green); }
-    .token-dot.err { background: var(--rose); }
-    .token-username { flex: 1; font-size: 0.7rem; color: var(--text-mid); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .token-actions { display: flex; gap: 2px; }
+
+    .token-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .token-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--text-dim);
+      flex-shrink: 0;
+    }
+
+    .token-dot.on {
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+    }
+
+    .token-dot.err {
+      background: var(--secondary);
+      box-shadow: 0 0 6px var(--secondary);
+    }
+
+    .token-username {
+      flex: 1;
+      font-size: 0.7rem;
+      color: var(--text-mid);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .token-actions {
+      display: flex;
+      gap: 2px;
+    }
+
     .btn-xs {
-      font-size: 0.6rem; font-family: 'Poppins', sans-serif;
-      padding: 2px 6px; border-radius: 2px; border: 1px solid var(--line);
-      background: transparent; color: var(--text-dim); cursor: pointer;
-      transition: border-color .15s, color .15s;
+      font-size: 0.6rem;
+      font-family: 'Poppins', sans-serif;
+      padding: 2px 6px;
+      border-radius: 2px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .btn-xs:hover { border-color: var(--rose); color: var(--rose); }
-    .token-add-row { padding: 6px 10px; display: flex; gap: 6px; align-items: center; }
+
+    .btn-xs:hover {
+      border-color: var(--secondary);
+      color: var(--secondary);
+      box-shadow: 0 0 6px rgba(155, 89, 182, 0.3);
+    }
+
+    .token-add-row {
+      padding: 6px 10px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
     .token-input-inline {
-      flex: 1; background: var(--bg0); border: 1px solid var(--line);
-      color: var(--text); font-family: 'Poppins', sans-serif; font-size: 0.65rem;
-      padding: 4px 8px; border-radius: 2px;
+      flex: 1;
+      background: var(--bg0);
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.65rem;
+      padding: 4px 8px;
+      border-radius: 2px;
     }
-    .token-input-inline:focus { outline: none; border-color: var(--rose-dim); }
-    .token-input-inline::placeholder { color: var(--text-dim); }
+
+    .token-input-inline:focus {
+      outline: none;
+      border-color: var(--secondary-dim);
+      box-shadow: 0 0 6px rgba(155, 89, 182, 0.2);
+    }
+
+    .token-input-inline::placeholder {
+      color: var(--text-dim);
+    }
+
     .btn-add-token {
-      padding: 4px 8px; border: 1px solid var(--rose-dim); border-radius: 2px;
-      background: transparent; color: var(--rose); font-family: 'Poppins', sans-serif;
-      font-size: 0.65rem; cursor: pointer;
+      padding: 4px 8px;
+      border: 1px solid var(--secondary-dim);
+      border-radius: 2px;
+      background: transparent;
+      color: var(--secondary);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.65rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
+
+    .btn-add-token:hover {
+      background: var(--secondary-faint);
+      box-shadow: 0 0 6px rgba(155, 89, 182, 0.3);
+    }
+
     .btn-new-profile {
-      width: calc(100% - 16px); margin: 8px;
-      padding: 7px; border: 1px dashed var(--line); border-radius: var(--radius);
-      background: transparent; color: var(--text-dim); font-family: 'Poppins', sans-serif;
-      font-size: 0.72rem; cursor: pointer; letter-spacing: .05em;
-      transition: border-color .15s, color .15s;
+      width: calc(100% - 16px);
+      margin: 8px;
+      padding: 7px;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--text-dim);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.72rem;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: all 0.2s ease;
     }
-    .btn-new-profile:hover { border-color: var(--rose-dim); color: var(--rose); }
+
+    .btn-new-profile:hover {
+      border-color: var(--secondary-dim);
+      color: var(--secondary);
+      box-shadow: 0 0 8px rgba(155, 89, 182, 0.2);
+    }
 
     /* CHANNEL */
-    .channel-id-section { padding: 10px 8px; border-bottom: 1px solid var(--line); }
+    .channel-id-section {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
     .channel-id-input {
-      width: 100%; padding: 8px 10px; border-radius: var(--radius);
-      border: 1px solid var(--line); background: var(--bg2);
-      color: var(--text); font-family: 'Poppins', sans-serif; font-size: 0.78rem; margin-bottom: 8px;
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--bg2);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.78rem;
+      margin-bottom: 8px;
+      transition: all 0.2s ease;
     }
-    .channel-id-input:focus { outline: none; border-color: var(--rose-dim); }
-    .channel-id-input::placeholder { color: var(--text-dim); }
 
-    /* WHILE LOOP */
-    .while-controls { padding: 10px 8px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
-    .while-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: .1em; }
-    .while-toggle { display: flex; align-items: center; gap: 8px; }
-    .toggle-switch {
-      width: 40px; height: 20px; background: var(--bg3); border: 1px solid var(--line);
-      border-radius: 10px; position: relative; cursor: pointer; transition: background .2s;
+    .channel-id-input:focus {
+      outline: none;
+      border-color: var(--secondary-dim);
+      box-shadow: 0 0 6px rgba(155, 89, 182, 0.2);
     }
-    .toggle-switch.active { background: var(--rose-faint); border-color: var(--rose-dim); }
-    .toggle-switch::after {
-      content: ''; width: 16px; height: 16px; background: var(--text-dim);
-      border-radius: 50%; position: absolute; top: 2px; left: 2px;
-      transition: transform .2s, background .2s;
+
+    .channel-id-input::placeholder {
+      color: var(--text-dim);
     }
-    .toggle-switch.active::after { transform: translateX(20px); background: var(--rose); }
-    .delay-slider { width: 100%; margin-top: 8px; }
-    .delay-label { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-mid); }
-    input[type="range"] { -webkit-appearance: none; width: 100%; height: 4px; background: var(--bg3); border-radius: 2px; outline: none; }
-    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: var(--rose); border-radius: 50%; cursor: pointer; }
 
-    /* RAGEBAIT */
-    .ragebait-controls { padding: 10px 8px; border-bottom: 1px solid var(--line); }
-    .ragebait-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px; }
-    .ragebait-status { display: flex; align-items: center; gap: 6px; font-size: 0.65rem; color: var(--text-mid); }
-    .ragebait-status.active { color: var(--green); }
-    .ragebait-logs-section { padding: 10px 8px; border-bottom: 1px solid var(--line); max-height: 120px; overflow-y: auto; }
-    .ragebait-logs-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px; }
-    .btn-clear-logs { background: transparent; border: none; color: var(--text-dim); font-family: 'Poppins', sans-serif; font-size: 0.65rem; cursor: pointer; padding: 2px 6px; border-radius: 2px; }
-    .btn-clear-logs:hover { color: var(--rose); text-decoration: underline; }
-    .ragebait-log { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 0.65rem; color: var(--text-dim); border-bottom: 1px solid var(--line); }
-    .ragebait-log:last-child { border-bottom: none; }
+    /* VICTIM ID */
+    .victim-id-section {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+    }
 
-    /* MULTI-ACCOUNT WS STATUS */
-    .ws-status-list { padding: 8px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; }
-    .ws-status-item { display: flex; align-items: center; gap: 6px; font-size: 0.65rem; color: var(--text-dim); }
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-dim); flex-shrink: 0; }
-    .status-dot.connected { background: var(--green); }
-    .status-dot.disconnected { background: var(--rose); }
-    .status-dot.connecting { background: #f0a500; }
+    .victim-id-input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--bg2);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.78rem;
+      margin-bottom: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .victim-id-input:focus {
+      outline: none;
+      border-color: var(--cyan);
+      box-shadow: 0 0 6px rgba(0, 212, 255, 0.3);
+    }
+
+    .victim-id-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    /* COLOR MODE TOGGLE */
+    .color-mode-section {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .color-mode-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: var(--radius);
+      background: var(--bg2);
+      border: 1px solid var(--line);
+    }
+
+    .color-mode-label {
+      font-size: 0.75rem;
+      color: var(--text-mid);
+    }
+
+    .color-mode-switch {
+      width: 40px;
+      height: 20px;
+      background: var(--bg3);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .color-mode-switch.active {
+      background: linear-gradient(90deg, var(--secondary), var(--purple));
+      border-color: var(--secondary-dim);
+    }
+
+    .color-mode-switch::after {
+      content: '';
+      width: 16px;
+      height: 16px;
+      background: var(--text-dim);
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .color-mode-switch.active::after {
+      transform: translateX(20px);
+      background: white;
+      box-shadow: 0 0 6px rgba(155, 89, 182, 0.5);
+    }
 
     /* MAIN */
-    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg0); }
-    .main-header {
-      padding: 0 20px; border-bottom: 1px solid var(--line); height: 50px;
-      display: flex; align-items: center; justify-content: space-between; background: var(--bg1);
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg0);
     }
-    .channel-info { display: flex; align-items: center; gap: 10px; }
-    .channel-icon { color: var(--text-dim); font-size: 0.85rem; }
-    .channel-name { font-weight: 700; font-size: 0.95rem; color: var(--text); }
-    .channel-desc { font-size: 0.7rem; color: var(--text-dim); }
-    .header-actions { display: flex; gap: 8px; align-items: center; }
+
+    .main-header {
+      padding: 0 20px;
+      border-bottom: 1px solid var(--line);
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg1);
+    }
+
+    .channel-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .channel-icon {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    .channel-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .channel-desc {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
 
     /* CHAT */
-    .chat-area { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 2px; }
-    .chat-welcome { margin: auto; text-align: center; padding: 40px 20px; color: var(--text-dim); }
-    .chat-welcome h2 { font-size: 1.3rem; font-weight: 800; color: var(--text); margin-bottom: 8px; }
-    .chat-welcome h2 span { color: var(--rose); }
-    .chat-welcome p { font-size: 0.75rem; line-height: 1.8; }
+    .chat-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      background: var(--bg0);
+    }
+
+    .chat-welcome {
+      margin: auto;
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-dim);
+    }
+
+    .chat-welcome h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, var(--secondary), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .chat-welcome p {
+      font-size: 0.75rem;
+      line-height: 1.8;
+    }
 
     /* MESSAGES */
-    .message { display: flex; gap: 12px; padding: 4px 8px; border-radius: 2px; animation: fadein .15s ease-out; }
-    @keyframes fadein { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-    .message-avatar {
-      width: 32px; height: 32px; border-radius: 2px;
-      background: var(--bg3); border: 1px solid var(--line);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 0.75rem; color: var(--text-mid);
-      flex-shrink: 0; overflow: hidden;
+    .message {
+      display: flex;
+      gap: 12px;
+      padding: 4px 8px;
+      border-radius: 2px;
+      animation: fadein 0.15s ease-out;
+      transition: background 0.2s ease;
     }
-    .message-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .message-content { flex: 1; min-width: 0; }
-    .message-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; }
-    .message-author { font-size: 0.82rem; font-weight: 700; color: var(--text); }
-    .message-time { font-size: 0.65rem; color: var(--text-dim); }
-    .message-text { font-size: 0.82rem; color: var(--text-mid); line-height: 1.6; white-space: pre-wrap; word-wrap: break-word; }
-    .message-system { display: flex; align-items: center; gap: 8px; padding: 4px 8px; color: var(--text-dim); font-size: 0.68rem; }
-    .message-system::before, .message-system::after { content: ''; flex: 1; height: 1px; background: var(--line); }
 
-    /* Token badge in chat */
-    .token-badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      background: var(--bg3); border: 1px solid var(--line);
-      border-radius: 3px; padding: 1px 5px; font-size: 0.6rem;
-      color: var(--text-dim); margin-left: 4px; vertical-align: middle;
+    .message:hover {
+      background: var(--bg1);
     }
-    .token-badge .dot { width: 4px; height: 4px; }
+
+    @keyframes fadein {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg3);
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.75rem;
+      color: var(--text-mid);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .message-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .message-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .message-header {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 2px;
+    }
+
+    .message-author {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .message-time {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
+    .message-text {
+      font-size: 0.82rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .message-system {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 8px;
+      color: var(--text-dim);
+      font-size: 0.68rem;
+    }
+
+    .message-system::before,
+    .message-system::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
 
     /* INPUT */
-    .input-area { padding: 0 16px 16px; }
+    .input-area {
+      padding: 0 16px 16px;
+    }
+
     .input-container {
-      background: var(--bg2); border: 1px solid var(--line);
-      border-radius: var(--radius); padding: 10px 14px;
-      display: flex; flex-direction: column; gap: 8px;
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
-    .input-toolbar { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+    .input-toolbar {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
     .toolbar-btn {
-      padding: 3px 8px; border-radius: 2px; border: 1px solid var(--line);
-      background: transparent; color: var(--text-dim); font-family: 'Poppins', sans-serif;
-      font-size: 0.7rem; cursor: pointer; transition: border-color .15s, color .15s;
+      padding: 3px 8px;
+      border-radius: 2px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--text-dim);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .toolbar-btn:hover { border-color: var(--rose-dim); color: var(--rose); }
-    .toolbar-btn.active { border-color: var(--rose); color: var(--rose); background: var(--rose-faint); }
-    .toolbar-btn.ragebait-active { background: var(--green); border-color: var(--green); color: white; }
-    .toolbar-btn.while-active { background: var(--rose-faint); border-color: var(--rose); color: var(--rose); }
-    .toolbar-token-select {
-      margin-left: auto; background: var(--bg3); border: 1px solid var(--line);
-      color: var(--text-mid); font-family: 'Poppins', sans-serif; font-size: 0.68rem;
-      padding: 3px 8px; border-radius: 2px; cursor: pointer;
+
+    .toolbar-btn:hover {
+      border-color: var(--secondary-dim);
+      color: var(--secondary);
+      box-shadow: 0 0 6px rgba(155, 89, 182, 0.3);
     }
-    .toolbar-token-select:focus { outline: none; border-color: var(--rose-dim); }
+
+    .toolbar-btn.active {
+      border-color: var(--secondary);
+      color: var(--secondary);
+      background: var(--secondary-faint);
+      box-shadow: 0 0 8px rgba(155, 89, 182, 0.4);
+    }
+
     .message-input {
-      width: 100%; background: transparent; border: none; color: var(--text);
-      font-family: 'Poppins', sans-serif; font-size: 0.85rem; resize: none;
-      min-height: 40px; max-height: 180px; outline: none; line-height: 1.6;
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.85rem;
+      resize: none;
+      min-height: 40px;
+      max-height: 180px;
+      outline: none;
+      line-height: 1.6;
     }
-    .message-input::placeholder { color: var(--text-dim); }
-    .input-footer { display: flex; justify-content: space-between; align-items: center; }
-    .input-hint { font-size: 0.65rem; color: var(--text-dim); }
+
+    .message-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    .input-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .input-hint {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
     .send-btn {
-      padding: 7px 18px; border-radius: var(--radius);
-      border: 1px solid var(--rose-dim); background: transparent;
-      color: var(--rose); font-family: 'Poppins', sans-serif; font-size: 0.78rem; font-weight: 500;
-      cursor: pointer; letter-spacing: .05em; display: flex; align-items: center; gap: 6px;
-      transition: background .15s, color .15s;
+      padding: 7px 18px;
+      border-radius: var(--radius);
+      border: 1px solid var(--secondary-dim);
+      background: transparent;
+      color: var(--secondary);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
     }
-    .send-btn:hover { background: var(--rose-faint); }
-    .send-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+    .send-btn:hover {
+      background: var(--secondary-faint);
+      box-shadow: 0 0 8px rgba(155, 89, 182, 0.4);
+    }
+
+    .send-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
 
     /* MODAL */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; z-index: 1000; }
-    .modal-overlay.active { display: flex; }
-    .modal { background: var(--bg1); border: 1px solid var(--line); border-radius: var(--radius); width: 90%; max-width: 440px; max-height: 90vh; overflow-y: auto; }
-    .modal-header { padding: 18px 20px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
-    .modal-header h2 { font-size: 1rem; font-weight: 800; color: var(--text); }
-    .modal-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
-    .modal-footer { padding: 14px 20px; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; gap: 8px; }
-    .form-group { display: flex; flex-direction: column; gap: 5px; }
-    .form-group label { font-size: 0.65rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-dim); }
-    .form-input {
-      padding: 9px 12px; border-radius: var(--radius); border: 1px solid var(--line);
-      background: var(--bg2); color: var(--text); font-family: 'Poppins', sans-serif;
-      font-size: 0.82rem; width: 100%; transition: border-color .15s;
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
     }
-    .form-input:focus { outline: none; border-color: var(--rose-dim); }
-    .form-input::placeholder { color: var(--text-dim); }
-    textarea.form-input { min-height: 70px; resize: vertical; }
-    .form-hint { font-size: 0.68rem; color: var(--text-dim); margin-top: 2px; }
-    .btn { padding: 8px 18px; border-radius: var(--radius); border: 1px solid var(--line); background: transparent; color: var(--text); font-family: 'Poppins', sans-serif; font-size: 0.78rem; cursor: pointer; transition: border-color .15s, color .15s, background .15s; }
-    .btn-primary { border-color: var(--rose-dim); color: var(--rose); }
-    .btn-primary:hover { background: var(--rose-faint); }
-    .btn:hover { border-color: var(--text-mid); }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg1);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 440px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .join-server-modal {
+      max-width: 500px;
+    }
+
+    .modal-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .modal-body {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .modal-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group label {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .form-input {
+      padding: 9px 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--bg2);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.82rem;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--secondary-dim);
+      box-shadow: 0 0 6px rgba(155, 89, 182, 0.2);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    textarea.form-input {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    .form-hint {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .btn {
+      padding: 8px 18px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      border-color: var(--secondary-dim);
+      color: var(--secondary);
+    }
+
+    .btn-primary:hover {
+      background: var(--secondary-faint);
+      box-shadow: 0 0 8px rgba(155, 89, 182, 0.3);
+    }
+
+    .btn:hover {
+      border-color: var(--text-mid);
+    }
+
+    .server-list {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 8px;
+      background: var(--bg2);
+    }
+
+    .server-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .server-item:hover {
+      background: var(--bg3);
+    }
+
+    .server-item-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--bg4);
+      border: 1px solid var(--line);
+    }
+
+    .server-item-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .server-item-name {
+      flex: 1;
+      font-size: 0.8rem;
+      color: var(--text);
+    }
+
+    .server-item-invite {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
 
     @media (max-width: 600px) {
-      .sidebar { position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; transform: translateX(-100%); transition: transform .25s; }
-      .sidebar.open { transform: translateX(0); }
-      .menu-toggle { display: flex !important; }
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.25s;
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .menu-toggle {
+        display: flex !important;
+      }
     }
-    .menu-toggle { display: none; }
+
+    .menu-toggle {
+      display: none;
+    }
 
     /* Active tokens row */
     .active-tokens-row {
-      display: flex; flex-wrap: wrap; gap: 4px;
-      padding: 6px 8px; border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--line);
       background: var(--bg0);
     }
+
     .active-token-chip {
-      display: flex; align-items: center; gap: 4px;
-      background: var(--bg2); border: 1px solid var(--line);
-      border-radius: 3px; padding: 2px 6px;
-      font-size: 0.62rem; color: var(--text-mid);
-      cursor: pointer; transition: border-color .15s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      padding: 2px 6px;
+      font-size: 0.62rem;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .active-token-chip.ws-on { border-color: var(--green); }
-    .active-token-chip.ws-err { border-color: var(--rose); }
+
+    .active-token-chip:hover {
+      border-color: var(--secondary-dim);
+      box-shadow: 0 0 6px rgba(155, 89, 182, 0.3);
+    }
+
+    .active-token-chip.ws-on {
+      border-color: var(--green);
+    }
+
+    .active-token-chip.ws-err {
+      border-color: var(--secondary);
+    }
+
+    /* WHILE LOOP */
+    .while-controls {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .while-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .while-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toggle-switch {
+      width: 40px;
+      height: 20px;
+      background: var(--bg3);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .toggle-switch.active {
+      background: linear-gradient(90deg, var(--green), var(--cyan));
+      border-color: var(--green);
+    }
+
+    .toggle-switch::after {
+      content: '';
+      width: 16px;
+      height: 16px;
+      background: var(--text-dim);
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .toggle-switch.active::after {
+      transform: translateX(20px);
+      background: white;
+      box-shadow: 0 0 6px rgba(59, 165, 93, 0.5);
+    }
+
+    .delay-slider {
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .delay-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+      color: var(--text-mid);
+    }
+
+    input[type='range'] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 4px;
+      background: var(--bg3);
+      border-radius: 2px;
+      outline: none;
+    }
+
+    input[type='range']::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      background: var(--secondary);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 6px rgba(155, 89, 182, 0.5);
+    }
+
+    /* RAGEBAIT */
+    .ragebait-controls {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .ragebait-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .ragebait-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.65rem;
+      color: var(--text-mid);
+    }
+
+    .ragebait-status.active {
+      color: var(--green);
+    }
+
+    /* RAGEBAIT LOGS */
+    .ragebait-logs-section {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    .ragebait-logs-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .btn-clear-logs {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.65rem;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 2px;
+    }
+
+    .btn-clear-logs:hover {
+      color: var(--secondary);
+      text-decoration: underline;
+    }
+
+    .ragebait-log {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .ragebait-log:last-child {
+      border-bottom: none;
+    }
+
+    /* COLOR DIAGRAM */
+    .color-diagram {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 200px;
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px;
+      z-index: 1000;
+      display: none;
+    }
+
+    .color-diagram.active {
+      display: block;
+    }
+
+    .color-diagram-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.75rem;
+      color: var(--text-mid);
+    }
+
+    .color-diagram-close {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .color-diagram-body {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .color-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 8px;
+      border-radius: var(--radius);
+      background: var(--bg3);
+      font-size: 0.7rem;
+    }
+
+    .color-preview {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+
+    .color-name {
+      flex: 1;
+      color: var(--text);
+    }
+
+    .color-value {
+      font-family: monospace;
+      color: var(--text-dim);
+      font-size: 0.65rem;
+    }
   </style>
 </head>
 
 <body>
+  <div class="color-diagram" id="colorDiagram">
+    <div class="color-diagram-header">
+      <span>Thèmes disponibles</span>
+      <button class="color-diagram-close" onclick="toggleColorDiagram()">✕</button>
+    </div>
+    <div class="color-diagram-body">
+      <div class="color-item">
+        <div class="color-preview" style="background: #2a2a2a;"></div>
+        <span class="color-name">Gris</span>
+        <div class="color-preview" style="background: #e8437a;"></div>
+        <span class="color-value">Rose</span>
+      </div>
+      <div class="color-item">
+        <div class="color-preview" style="background: #121212;"></div>
+        <span class="color-name">Noir</span>
+        <div class="color-preview" style="background: #9b59b6;"></div>
+        <span class="color-value">Violet</span>
+      </div>
+      <div class="color-item">
+        <div class="color-preview" style="background: #121212;"></div>
+        <span class="color-name">Noir</span>
+        <div class="color-preview" style="background: #3ba55d;"></div>
+        <span class="color-value">Vert</span>
+      </div>
+      <div class="color-item">
+        <div class="color-preview" style="background: #121212;"></div>
+        <span class="color-name">Noir</span>
+        <div class="color-preview" style="background: #4a90e2;"></div>
+        <span class="color-value">Bleu</span>
+      </div>
+    </div>
+  </div>
+
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <h1>YUZU <span>#4</span></h1>
-      <button class="btn-icon" onclick="openProfileModal()" title="Nouveau profil">+</button>
+      <div class="server-info">
+        <div class="server-avatar" id="serverAvatar">Y</div>
+        <span class="server-name" id="serverName">Yuzu</span>
+      </div>
+      <div class="header-actions">
+        <div class="theme-selector" onclick="toggleThemeDropdown()">
+          <div class="theme-icon">A</div>
+        </div>
+        <div class="theme-dropdown" id="themeDropdown">
+          <div class="theme-option" onclick="setTheme('default')">
+            <div class="theme-color" style="background: #2a2a2a;"></div>
+            <span class="theme-name">Gris / Rose</span>
+          </div>
+          <div class="theme-option" onclick="setTheme('dark-purple')">
+            <div class="theme-color" style="background: #121212;"></div>
+            <span class="theme-name">Noir / Violet</span>
+          </div>
+          <div class="theme-option" onclick="setTheme('dark-green')">
+            <div class="theme-color" style="background: #121212;"></div>
+            <span class="theme-name">Noir / Vert</span>
+          </div>
+          <div class="theme-option" onclick="setTheme('dark-blue')">
+            <div class="theme-color" style="background: #121212;"></div>
+            <span class="theme-name">Noir / Bleu</span>
+          </div>
+          <div class="theme-option" onclick="toggleColorDiagram()">
+            <div class="theme-color" style="background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff);"></div>
+            <span class="theme-name">Voir les couleurs</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="sidebar-body">
@@ -371,6 +1538,21 @@
         <input type="text" class="channel-id-input" id="channelIdInput" placeholder="ID du salon Discord..."
           onkeydown="if(event.key==='Enter') loadChannel()" />
         <button class="btn btn-primary" onclick="loadChannel()" style="width:100%;margin-top:8px;">Charger le salon</button>
+      </div>
+
+      <!-- Victim ID -->
+      <div class="victim-id-section">
+        <input type="text" class="victim-id-input" id="victimIdInput" placeholder="ID de la victime (ex: 123456789)..."
+          onkeydown="if(event.key==='Enter') saveVictimId()" />
+        <button class="btn btn-primary" onclick="saveVictimId()" style="width:100%;margin-top:8px;">Enregistrer l'ID</button>
+      </div>
+
+      <!-- Color Mode -->
+      <div class="color-mode-section">
+        <div class="color-mode-toggle">
+          <span class="color-mode-label">Mode Couleur</span>
+          <div class="color-mode-switch" id="colorModeToggle" onclick="toggleColorMode()"></div>
+        </div>
       </div>
 
       <!-- Token select -->
@@ -416,12 +1598,6 @@
         </div>
         <div id="ragebaitLogs"></div>
       </div>
-
-      <!-- WS Status per token -->
-      <div class="ws-status-list" id="wsStatusList">
-        <div style="font-size:.65rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">WebSockets</div>
-        <div style="font-size:.65rem;color:var(--text-dim);">Aucun token connecté</div>
-      </div>
     </div>
   </aside>
 
@@ -434,7 +1610,6 @@
         <span class="channel-desc" id="channelDesc">— entrez un ID de salon</span>
       </div>
       <div class="header-actions">
-        <button class="btn-icon" onclick="openInviteModal()" title="Rejoindre un serveur">🔗</button>
       </div>
     </header>
 
@@ -535,774 +1710,1008 @@
     </div>
   </div>
 
-  <!-- MODAL: REJOINDRE SERVEUR -->
-  <div class="modal-overlay" id="inviteModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2>Rejoindre un serveur</h2>
-        <button class="btn-icon" onclick="closeInviteModal()">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label>Lien d'invitation</label>
-          <input type="text" class="form-input" id="inviteInput" placeholder="https://discord.gg/XYZ" />
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn" onclick="closeInviteModal()">Annuler</button>
-        <button class="btn btn-primary" onclick="joinServer()">Rejoindre</button>
-      </div>
-    </div>
-  </div>
+  <script>
+    // ═══ STATE ════════════════════════════════════════════════════════════
+    let profiles = JSON.parse(localStorage.getItem('yuzu_profiles') || '[]');
+    let activeProfileId = localStorage.getItem('yuzu_active_profile') || null;
+    let selectedTokenMode = localStorage.getItem('yuzu_token_mode') || 'all';
+    let currentChannelId = null;
+    let currentGuildId = null;
+    let currentGuildName = null;
+    let currentGuildIcon = null;
+    let mentionEveryone = false;
+    let whileModeActive = false;
+    let whileInterval = null;
+    let whileDelay = 1000;
+    let victimId = localStorage.getItem('yuzu_victim_id') || '';
+    let colorModeActive = JSON.parse(localStorage.getItem('yuzu_color_mode') || 'false');
+    let currentColorIndex = 0;
+    let rageBaitConfig = JSON.parse(localStorage.getItem('yuzu_ragebait_config') || '{}');
+    let rageBaitActive = false;
+    let rageBaitMessageIndex = 0;
+    let rageBaitLogs = JSON.parse(localStorage.getItem('yuzu_ragebait_logs') || '[]');
+    let currentTheme = localStorage.getItem('yuzu_theme') || 'default';
+    let userServers = JSON.parse(localStorage.getItem('yuzu_user_servers') || '[]');
 
-<script>
-// ═══ STATE ════════════════════════════════════════════════════════════
-let profiles       = JSON.parse(localStorage.getItem('yuzu_profiles')       || '[]');
-let activeProfileId = localStorage.getItem('yuzu_active_profile')           || null;
-let selectedTokenMode = localStorage.getItem('yuzu_token_mode')             || 'all'; // 'all' | 'profileId_idx'
-let currentChannelId = null;
-let mentionEveryone  = false;
-let whileModeActive  = false;
-let whileInterval    = null;
-let whileDelay       = 1000;
-let rageBaitConfig   = JSON.parse(localStorage.getItem('yuzu_ragebait_config') || '{}');
-let rageBaitActive   = false;
-let rageBaitMessageIndex = 0;
-let rageBaitLogs     = JSON.parse(localStorage.getItem('yuzu_ragebait_logs') || '[]');
+    // Couleurs pour le mode couleur
+    const messageColors = [
+      { name: 'Rouge', code: 'diff', prefix: '- ', suffix: '' },
+      { name: 'Vert', code: 'diff', prefix: '+ ', suffix: '' },
+      { name: 'Bleu', code: 'ini', prefix: '[', suffix: ']' },
+      { name: 'Orange', code: 'fix', prefix: '', suffix: '' },
+      { name: 'Cyan', code: 'json', prefix: '"', suffix: '"' }
+    ];
 
-// ═══ MULTI-ACCOUNT WEBSOCKET MAP ════════════════════════════════════
-// key: "profileId_tokenIdx"  value: { socket, heartbeatTimer, guildId, seq, identified }
-const sockets = {};
+    // ═══ MULTI-ACCOUNT WEBSOCKET MAP ════════════════════════════════════
+    const sockets = {};
+    const API = 'https://discord.com/api/v9';
+    const WS_URL = 'wss://gateway.discord.gg/?v=9&encoding=json';
 
-const API    = 'https://discord.com/api/v9';
-const WS_URL = 'wss://gateway.discord.gg/?v=9&encoding=json';
+    // ═══ INIT ═══════════════════════════════════════════════════════════
+    document.addEventListener('DOMContentLoaded', () => {
+      applyTheme(currentTheme);
+      renderProfiles();
+      updateTokenSelect();
+      updateWhileButton();
+      document.getElementById('victimIdInput').value = victimId;
+      document.getElementById('colorModeToggle').classList.toggle('active', colorModeActive);
+      loadRageBaitConfig();
+      renderRageBaitLogs();
+      loadUserServers();
+    });
 
-// ═══ INIT ═══════════════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', () => {
-  renderProfiles();
-  updateTokenSelect();
-  updateWhileButton();
-  loadRageBaitConfig();
-  renderRageBaitLogs();
-});
-
-// ═══════════════════════════════════════════════════════════════════
-// PROFILE MANAGEMENT
-// ═══════════════════════════════════════════════════════════════════
-function renderProfiles() {
-  const list  = document.getElementById('profileList');
-  const count = document.getElementById('profileCount');
-  list.innerHTML = '';
-  count.textContent = profiles.length;
-
-  profiles.forEach(profile => {
-    const isActive = profile.id === activeProfileId;
-    const expanded = profile.expanded || false;
-    const tokens   = profile.tokens || [];
-    const connectedCount = tokens.filter(t => t.connected).length;
-
-    const card = document.createElement('div');
-    card.className = `profile-card ${isActive ? 'active' : ''} ${expanded ? 'expanded' : ''}`;
-    card.id = 'card_' + profile.id;
-
-    const avatarHtml = profile.avatar
-      ? `<img src="${escapeHtml(profile.avatar)}" alt="" />`
-      : escapeHtml(profile.name.charAt(0).toUpperCase());
-
-    card.innerHTML = `
-      <div class="profile-card-header" onclick="activateProfile('${profile.id}')">
-        <div class="profile-avatar">${avatarHtml}</div>
-        <div class="profile-info">
-          <div class="profile-name">${escapeHtml(profile.name)}</div>
-          <div class="profile-meta">
-            <span class="dot ${connectedCount > 0 ? 'on' : ''}"></span>
-            <span>${connectedCount}/${tokens.length} token${tokens.length !== 1 ? 's' : ''}</span>
-          </div>
-        </div>
-        <span class="profile-toggle" onclick="event.stopPropagation();toggleExpand('${profile.id}')">${expanded ? '▲' : '▼'}</span>
-      </div>
-      <div class="profile-card-actions">
-        <button class="btn-xs" onclick="event.stopPropagation();deleteProfile('${profile.id}')">supprimer</button>
-      </div>
-      <div class="token-list" id="tokens_${profile.id}">${renderTokenRows(profile)}</div>
-    `;
-    list.appendChild(card);
-  });
-
-  updateTokenSelect();
-  updateActiveTokensRow();
-  updateWsStatusList();
-}
-
-function renderTokenRows(profile) {
-  const tokens = profile.tokens || [];
-  let html = tokens.map((t, i) => {
-    const key = profile.id + '_' + i;
-    const wsEntry = sockets[key];
-    const wsClass = wsEntry ? (wsEntry.identified ? 'on' : 'err') : '';
-    const avatarHtml = t.avatar
-      ? `<img src="${escapeHtml(t.avatar)}" alt="" />`
-      : escapeHtml(t.username ? t.username.charAt(0).toUpperCase() : '?');
-    return `
-      <div class="token-row" id="trow_${key}">
-        <div class="token-avatar">${avatarHtml}</div>
-        <span class="token-dot ${t.connected ? 'on' : (t.error ? 'err' : '')}"></span>
-        <span class="token-username">${t.username ? escapeHtml(t.username) : t.token.substring(0,16) + '…'}</span>
-        <div class="token-actions">
-          <button class="btn-xs" onclick="verifyToken('${profile.id}', ${i})">↺</button>
-          <button class="btn-xs" onclick="deleteToken('${profile.id}', ${i})">✕</button>
-        </div>
-      </div>`;
-  }).join('');
-  html += `
-    <div class="token-add-row">
-      <input class="token-input-inline" id="newtk_${profile.id}" placeholder="Nouveau token…" />
-      <button class="btn-add-token" onclick="addTokenToProfile('${profile.id}')">+</button>
-    </div>`;
-  return html;
-}
-
-function toggleExpand(profileId) {
-  const p = profiles.find(x => x.id === profileId);
-  if (p) { p.expanded = !p.expanded; saveProfiles(); renderProfiles(); }
-}
-
-// ─── Add Profile ────────────────────────────────────────────────────
-async function addProfile() {
-  const name   = document.getElementById('profileNameInput').value.trim();
-  const avatar = document.getElementById('profileAvatarInput').value.trim();
-  const token  = document.getElementById('tokenInput').value.trim();
-  if (!name) { appendSystemMessage('❌ Nom requis.'); return; }
-
-  const profile = {
-    id: 'p_' + Date.now(),
-    name,
-    avatar: avatar || null,
-    tokens: token ? [{ token, connected: false, username: null, avatar: null }] : [],
-    expanded: false
-  };
-  profiles.push(profile);
-  saveProfiles();
-  closeProfileModal();
-  renderProfiles();
-  if (token) await verifyToken(profile.id, 0);
-}
-
-// ─── Token CRUD ─────────────────────────────────────────────────────
-async function addTokenToProfile(profileId) {
-  const input = document.getElementById('newtk_' + profileId);
-  if (!input) return;
-  const token = input.value.trim();
-  if (!token) return;
-  const profile = profiles.find(p => p.id === profileId);
-  if (!profile) return;
-  profile.tokens.push({ token, connected: false, username: null, avatar: null });
-  input.value = '';
-  saveProfiles();
-  renderProfiles();
-  await verifyToken(profileId, profile.tokens.length - 1);
-}
-
-async function verifyToken(profileId, tokenIndex) {
-  const profile = profiles.find(p => p.id === profileId);
-  if (!profile || !profile.tokens[tokenIndex]) return;
-  const t = profile.tokens[tokenIndex];
-  appendSystemMessage(`↺ Vérification token ${tokenIndex + 1} de ${profile.name}…`);
-  try {
-    const res = await fetch(`${API}/users/@me`, { headers: { Authorization: t.token } });
-    if (res.ok) {
-      const user = await res.json();
-      t.connected = true; t.error = false;
-      t.username = user.username + (user.discriminator && user.discriminator !== '0' ? '#' + user.discriminator : '');
-      t.userId   = user.id;
-      t.avatar   = user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=64` : null;
-      appendSystemMessage(`✅ Token ${tokenIndex + 1}: ${t.username}`);
-      // If channel is already loaded, open WS for this new token
-      if (currentChannelId) openSocket(profileId, tokenIndex);
-    } else {
-      t.connected = false; t.error = true; t.username = null; t.avatar = null;
-      appendSystemMessage(`❌ Token ${tokenIndex + 1} invalide.`);
+    // ═══════════════════════════════════════════════════════════════════
+    // THÈMES
+    // ═══════════════════════════════════════════════════════════════════
+    function applyTheme(theme) {
+      const body = document.body;
+      body.className = '';
+      if (theme !== 'default') {
+        body.classList.add(`theme-${theme}`);
+      }
+      localStorage.setItem('yuzu_theme', theme);
+      currentTheme = theme;
     }
-  } catch (err) {
-    t.connected = false; t.error = true; t.avatar = null;
-    appendSystemMessage(`❌ Erreur: ${err.message}`);
-  }
-  saveProfiles(); renderProfiles(); updateTokenSelect();
-}
 
-function deleteToken(profileId, tokenIndex) {
-  const profile = profiles.find(p => p.id === profileId);
-  if (!profile) return;
-  const key = profileId + '_' + tokenIndex;
-  closeSocket(key);
-  profile.tokens.splice(tokenIndex, 1);
-  // Update socket keys (indices shifted)
-  rebuildSocketKeys(profileId);
-  saveProfiles(); renderProfiles(); updateTokenSelect();
-}
+    function setTheme(theme) {
+      applyTheme(theme);
+      toggleThemeDropdown();
+    }
 
-function deleteProfile(profileId) {
-  if (!confirm('Supprimer ce profil et ses tokens ?')) return;
-  // Close all sockets for this profile
-  Object.keys(sockets).filter(k => k.startsWith(profileId + '_')).forEach(closeSocket);
-  profiles = profiles.filter(p => p.id !== profileId);
-  if (activeProfileId === profileId) { activeProfileId = null; localStorage.removeItem('yuzu_active_profile'); }
-  saveProfiles(); renderProfiles(); updateTokenSelect();
-}
+    function toggleThemeDropdown() {
+      const dropdown = document.getElementById('themeDropdown');
+      dropdown.classList.toggle('active');
+    }
 
-function activateProfile(profileId) {
-  activeProfileId = profileId;
-  localStorage.setItem('yuzu_active_profile', profileId);
-  renderProfiles();
-  document.getElementById('inputArea').style.display = 'block';
-}
+    function toggleColorDiagram() {
+      const diagram = document.getElementById('colorDiagram');
+      diagram.classList.toggle('active');
+    }
 
-function saveProfiles() { localStorage.setItem('yuzu_profiles', JSON.stringify(profiles)); }
-
-// ═══════════════════════════════════════════════════════════════════
-// TOKEN SELECT
-// ═══════════════════════════════════════════════════════════════════
-function updateTokenSelect() {
-  const select = document.getElementById('tokenSelect');
-  const prev   = select.value;
-  select.innerHTML = '<option value="all">Tous les tokens connectés</option>';
-  profiles.forEach(profile => {
-    (profile.tokens || []).forEach((t, i) => {
-      if (!t.connected) return;
-      const opt = document.createElement('option');
-      opt.value = profile.id + '_' + i;
-      opt.textContent = `${profile.name} / ${t.username || 'Token ' + (i+1)}`;
-      select.appendChild(opt);
+    // Fermer le dropdown si on clique ailleurs
+    document.addEventListener('click', e => {
+      const themeSelector = document.querySelector('.theme-selector');
+      const themeDropdown = document.getElementById('themeDropdown');
+      if (!themeSelector.contains(e.target) && !themeDropdown.contains(e.target)) {
+        themeDropdown.classList.remove('active');
+      }
     });
-  });
-  if (prev) select.value = prev;
-  if (!select.value) select.value = 'all';
-}
 
-function updateActiveToken() {
-  selectedTokenMode = document.getElementById('tokenSelect').value;
-  localStorage.setItem('yuzu_token_mode', selectedTokenMode);
-  updateActiveTokensRow();
-}
+    // ═══════════════════════════════════════════════════════════════════
+    // COLOR MODE
+    // ═══════════════════════════════════════════════════════════════════
+    function toggleColorMode() {
+      colorModeActive = !colorModeActive;
+      localStorage.setItem('yuzu_color_mode', colorModeActive);
+      document.getElementById('colorModeToggle').classList.toggle('active', colorModeActive);
+      appendSystemMessage(colorModeActive ? '✅ Mode Couleur activé' : '❌ Mode Couleur désactivé');
+    }
 
-// ─── Active tokens chips bar ──────────────────────────────────────
-function updateActiveTokensRow() {
-  const row = document.getElementById('activeTokensRow');
-  const tokensToShow = getTokensForSend();
-  if (!tokensToShow.length || !currentChannelId) { row.style.display = 'none'; return; }
-  row.style.display = 'flex';
-  row.innerHTML = '';
-  tokensToShow.forEach(({ key, username }) => {
-    const ws = sockets[key];
-    const cls = ws ? (ws.identified ? 'ws-on' : 'ws-err') : '';
-    const chip = document.createElement('div');
-    chip.className = `active-token-chip ${cls}`;
-    chip.innerHTML = `<span class="dot ${ws && ws.identified ? 'on' : (ws ? 'err' : '')}"></span>${escapeHtml(username)}`;
-    row.appendChild(chip);
-  });
-}
+    function getNextColor() {
+      if (!colorModeActive) return { code: null, prefix: '', suffix: '' };
+      const color = messageColors[currentColorIndex % messageColors.length];
+      currentColorIndex++;
+      return color;
+    }
 
-// ═══════════════════════════════════════════════════════════════════
-// CHANNEL LOADING
-// ═══════════════════════════════════════════════════════════════════
-function loadChannel() {
-  const channelId = document.getElementById('channelIdInput').value.trim();
-  if (!channelId) { appendSystemMessage('❌ ID de salon requis.'); return; }
+    // ═══════════════════════════════════════════════════════════════════
+    // RAGEBAIT
+    // ═══════════════════════════════════════════════════════════════════
+    function openRageBaitModal() {
+      document.getElementById('ragebaitModal').classList.add('active');
+      document.getElementById('ragebaitTargetIdInput').value = rageBaitConfig.targetId || '';
+      document.getElementById('ragebaitMessage1Input').value = rageBaitConfig.message1 || '@pseudo a rejoint le chat';
+      document.getElementById('ragebaitMessage2Input').value = rageBaitConfig.message2 || '@pseudo a quitté le chat';
+    }
 
-  currentChannelId = channelId;
-  document.getElementById('channelName').textContent = `#${channelId.substring(0, 8)}…`;
-  document.getElementById('channelDesc').textContent  = '— salon chargé';
-  document.getElementById('messageInput').placeholder = `message dans #${channelId.substring(0, 8)}…`;
-  document.getElementById('chatArea').innerHTML        = '';
-  document.getElementById('inputArea').style.display  = 'block';
-  document.getElementById('whileToolbarBtn').style.display   = 'flex';
-  document.getElementById('ragebaitToolbarBtn').style.display = 'flex';
-  appendSystemMessage(`Salon chargé: ${channelId}`);
+    function closeRageBaitModal() {
+      document.getElementById('ragebaitModal').classList.remove('active');
+    }
 
-  // Close all existing sockets
-  Object.keys(sockets).forEach(closeSocket);
+    function saveRageBaitConfig() {
+      const targetId = document.getElementById('ragebaitTargetIdInput').value.trim();
+      const message1 = document.getElementById('ragebaitMessage1Input').value.trim();
+      const message2 = document.getElementById('ragebaitMessage2Input').value.trim();
+      if (!targetId || !message1 || !message2) {
+        appendSystemMessage('❌ Tous les champs RageBait sont requis.');
+        return;
+      }
+      rageBaitConfig = { targetId, message1, message2 };
+      localStorage.setItem('yuzu_ragebait_config', JSON.stringify(rageBaitConfig));
+      closeRageBaitModal();
+      appendSystemMessage(`✅ RageBait configuré pour l'ID: ${targetId}`);
+      updateRageBaitStatus();
+    }
 
-  // Open one socket per connected token
-  profiles.forEach(profile => {
-    (profile.tokens || []).forEach((t, i) => {
-      if (t.connected) openSocket(profile.id, i);
-    });
-  });
-}
+    function loadRageBaitConfig() {
+      const c = JSON.parse(localStorage.getItem('yuzu_ragebait_config') || '{}');
+      if (c.targetId && c.message1 && c.message2) {
+        rageBaitConfig = c;
+        updateRageBaitStatus();
+      }
+    }
 
-// ═══════════════════════════════════════════════════════════════════
-// WEBSOCKET – one per token (FIXED)
-// ═══════════════════════════════════════════════════════════════════
-function openSocket(profileId, tokenIndex) {
-  const key     = profileId + '_' + tokenIndex;
-  const profile = profiles.find(p => p.id === profileId);
-  if (!profile) return;
-  const t = profile.tokens[tokenIndex];
-  if (!t || !t.connected) return;
+    function toggleRageBait() {
+      if (!rageBaitConfig.targetId) {
+        openRageBaitModal();
+        return;
+      }
+      rageBaitActive = !rageBaitActive;
+      rageBaitMessageIndex = 0;
+      appendSystemMessage(
+        rageBaitActive ? `✅ RageBait activé (cible: ${rageBaitConfig.targetId})` : '❌ RageBait désactivé'
+      );
+      updateRageBaitStatus();
+    }
 
-  // Close existing
-  if (sockets[key]) closeSocket(key);
+    function updateRageBaitStatus() {
+      const status = document.getElementById('ragebaitStatus');
+      const btn = document.getElementById('ragebaitToggleBtn');
+      const toolBtn = document.getElementById('ragebaitToolbarBtn');
+      if (rageBaitActive) {
+        status.textContent = 'Actif';
+        status.classList.add('active');
+        btn.textContent = 'Désactiver RageBait';
+        toolBtn.classList.add('ragebait-active');
+        toolBtn.textContent = '🎣 Arrêter';
+        toolBtn.style.display = 'flex';
+      } else {
+        status.textContent = rageBaitConfig.targetId ? 'Configuré' : 'Inactif';
+        status.classList.remove('active');
+        btn.textContent = 'Activer RageBait';
+        toolBtn.classList.remove('ragebait-active');
+        toolBtn.textContent = '🎣 RageBait';
+      }
+    }
 
-  const entry = { socket: null, heartbeatTimer: null, guildId: null, seq: null, identified: false, reconnectTimer: null, reconnectAttempts: 0 };
-  sockets[key] = entry;
+    function addRageBaitLog() {
+      rageBaitLogs.unshift({
+        ts: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+      });
+      if (rageBaitLogs.length > 30) rageBaitLogs.pop();
+      localStorage.setItem('yuzu_ragebait_logs', JSON.stringify(rageBaitLogs));
+      renderRageBaitLogs();
+    }
 
-  const username = t.username || `Token ${tokenIndex + 1}`;
-  updateWsStatusList();
+    function renderRageBaitLogs() {
+      const c = document.getElementById('ragebaitLogs');
+      c.innerHTML = rageBaitLogs.map(l => `<div class="ragebait-log">Message envoyé • ${l.ts}</div>`).join('');
+    }
 
-  function connect() {
-    try {
-      const ws = new WebSocket(WS_URL);
-      entry.socket = ws;
+    function clearRageBaitLogs() {
+      rageBaitLogs = [];
+      localStorage.setItem('yuzu_ragebait_logs', '[]');
+      renderRageBaitLogs();
+    }
 
-      ws.onopen = () => {
-        entry.reconnectAttempts = 0;
-        appendSystemMessage(`✅ WS ouvert: ${username}`);
-        updateWsStatusList(); updateActiveTokensRow();
-      };
+    // ═══════════════════════════════════════════════════════════════════
+    // SERVER MANAGEMENT
+    // ═══════════════════════════════════════════════════════════════════
+    async function loadUserServers() {
+      const tokens = getAllConnectedTokens();
+      if (!tokens.length) return;
 
-      ws.onmessage = ({ data }) => {
-        let msg;
-        try { msg = JSON.parse(data); } catch { return; }
-        const { op, t: evtType, d, s } = msg;
-        if (s !== null && s !== undefined) entry.seq = s;
-
-        switch (op) {
-          case 10: { // Hello → start heartbeat then identify
-            const interval = d.heartbeat_interval;
-            // Send first heartbeat immediately (recommended by Discord)
-            ws.send(JSON.stringify({ op: 1, d: entry.seq }));
-            entry.heartbeatTimer = setInterval(() => {
-              if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ op: 1, d: entry.seq }));
-            }, interval);
-            // Identify
-            ws.send(JSON.stringify({
-              op: 2,
-              d: {
-                token: t.token,
-                intents: 4609, // GUILDS | GUILD_MESSAGES | DIRECT_MESSAGES
-                properties: { os: 'linux', browser: 'yuzu', device: 'yuzu' }
+      userServers = [];
+      for (const { token } of tokens) {
+        try {
+          const res = await fetch(`${API}/users/@me/guilds`, {
+            headers: { Authorization: token }
+          });
+          if (res.ok) {
+            const guilds = await res.json();
+            guilds.forEach(guild => {
+              if (!userServers.some(s => s.id === guild.id)) {
+                userServers.push({
+                  id: guild.id,
+                  name: guild.name,
+                  icon: guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=64` : null
+                });
               }
-            }));
-            break;
+            });
           }
-          case 0: { // Dispatch
-            switch (evtType) {
-              case 'READY':
-                entry.identified = true;
-                updateWsStatusList(); updateActiveTokensRow();
-                appendSystemMessage(`✅ Identifié: ${d.user.username}`);
-                break;
-              case 'GUILD_CREATE':
-                entry.guildId = d.id;
-                break;
-              case 'MESSAGE_CREATE':
-                if (d.channel_id !== currentChannelId) break;
-                // Only append once (from the first socket that receives it) — deduplicate by message ID
-                if (!seenMessageIds.has(d.id)) {
-                  seenMessageIds.add(d.id);
-                  if (seenMessageIds.size > 500) {
-                    const first = seenMessageIds.values().next().value;
-                    seenMessageIds.delete(first);
+        } catch (err) {
+          console.error('Erreur lors du chargement des serveurs:', err);
+        }
+      }
+
+      localStorage.setItem('yuzu_user_servers', JSON.stringify(userServers));
+      renderServerList();
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // PROFILE MANAGEMENT
+    // ═══════════════════════════════════════════════════════════════════
+    function renderProfiles() {
+      const list = document.getElementById('profileList');
+      const count = document.getElementById('profileCount');
+      list.innerHTML = '';
+      count.textContent = profiles.length;
+
+      profiles.forEach(profile => {
+        const isActive = profile.id === activeProfileId;
+        const expanded = profile.expanded || false;
+        const tokens = profile.tokens || [];
+        const connectedCount = tokens.filter(t => t.connected).length;
+
+        const card = document.createElement('div');
+        card.className = `profile-card ${isActive ? 'active' : ''} ${expanded ? 'expanded' : ''}`;
+        card.id = 'card_' + profile.id;
+
+        const avatarHtml = profile.avatar
+          ? `<img src="${escapeHtml(profile.avatar)}" alt="" />`
+          : escapeHtml(profile.name.charAt(0).toUpperCase());
+
+        card.innerHTML = `
+          <div class="profile-card-header" onclick="activateProfile('${profile.id}')">
+            <div class="profile-avatar">${avatarHtml}</div>
+            <div class="profile-info">
+              <div class="profile-name">${escapeHtml(profile.name)}</div>
+              <div class="profile-meta">
+                <span class="dot ${connectedCount > 0 ? 'on' : ''}"></span>
+                <span>${connectedCount}/${tokens.length} token${tokens.length !== 1 ? 's' : ''}</span>
+              </div>
+            </div>
+            <span class="profile-toggle" onclick="event.stopPropagation();toggleExpand('${profile.id}')">${
+              expanded ? '▲' : '▼'
+            }</span>
+          </div>
+          <div class="profile-card-actions">
+            <button class="btn-xs" onclick="event.stopPropagation();deleteProfile('${profile.id}')">supprimer</button>
+          </div>
+          <div class="token-list" id="tokens_${profile.id}">${renderTokenRows(profile)}</div>
+        `;
+        list.appendChild(card);
+      });
+
+      updateTokenSelect();
+      updateActiveTokensRow();
+    }
+
+    function renderTokenRows(profile) {
+      const tokens = profile.tokens || [];
+      let html = tokens
+        .map((t, i) => {
+          const key = profile.id + '_' + i;
+          const wsEntry = sockets[key];
+          const avatarHtml = t.avatar
+            ? `<img src="${escapeHtml(t.avatar)}" alt="" />`
+            : escapeHtml(t.username ? t.username.charAt(0).toUpperCase() : '?');
+          return `
+          <div class="token-row" id="trow_${key}">
+            <div class="token-avatar">${avatarHtml}</div>
+            <span class="token-dot ${t.connected ? 'on' : t.error ? 'err' : ''}"></span>
+            <span class="token-username">${t.username ? escapeHtml(t.username) : t.token.substring(0, 16) + '…'}</span>
+            <div class="token-actions">
+              <button class="btn-xs" onclick="verifyToken('${profile.id}', ${i})">↺</button>
+              <button class="btn-xs" onclick="deleteToken('${profile.id}', ${i})">✕</button>
+            </div>
+          </div>`;
+        })
+        .join('');
+      html += `
+        <div class="token-add-row">
+          <input class="token-input-inline" id="newtk_${profile.id}" placeholder="Nouveau token…" />
+          <button class="btn-add-token" onclick="addTokenToProfile('${profile.id}')">+</button>
+        </div>`;
+      return html;
+    }
+
+    function toggleExpand(profileId) {
+      const p = profiles.find(x => x.id === profileId);
+      if (p) {
+        p.expanded = !p.expanded;
+        saveProfiles();
+        renderProfiles();
+      }
+    }
+
+    async function addProfile() {
+      const name = document.getElementById('profileNameInput').value.trim();
+      const avatar = document.getElementById('profileAvatarInput').value.trim();
+      const token = document.getElementById('tokenInput').value.trim();
+      if (!name) {
+        appendSystemMessage('❌ Nom requis.');
+        return;
+      }
+
+      const profile = {
+        id: 'p_' + Date.now(),
+        name,
+        avatar: avatar || null,
+        tokens: token ? [{ token, connected: false, username: null, avatar: null }] : [],
+        expanded: false
+      };
+      profiles.push(profile);
+      saveProfiles();
+      closeProfileModal();
+      renderProfiles();
+      if (token) await verifyToken(profile.id, 0);
+    }
+
+    async function addTokenToProfile(profileId) {
+      const input = document.getElementById('newtk_' + profileId);
+      if (!input) return;
+      const token = input.value.trim();
+      if (!token) return;
+      const profile = profiles.find(p => p.id === profileId);
+      if (!profile) return;
+      profile.tokens.push({ token, connected: false, username: null, avatar: null });
+      input.value = '';
+      saveProfiles();
+      renderProfiles();
+      await verifyToken(profileId, profile.tokens.length - 1);
+    }
+
+    async function verifyToken(profileId, tokenIndex) {
+      const profile = profiles.find(p => p.id === profileId);
+      if (!profile || !profile.tokens[tokenIndex]) return;
+      const t = profile.tokens[tokenIndex];
+      appendSystemMessage(`↺ Vérification token ${tokenIndex + 1} de ${profile.name}…`);
+      try {
+        const res = await fetch(`${API}/users/@me`, { headers: { Authorization: t.token } });
+        if (res.ok) {
+          const user = await res.json();
+          t.connected = true;
+          t.error = false;
+          t.username = user.username + (user.discriminator && user.discriminator !== '0' ? '#' + user.discriminator : '');
+          t.userId = user.id;
+          t.avatar = user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=64` : null;
+          appendSystemMessage(`✅ Token ${tokenIndex + 1}: ${t.username}`);
+          if (currentChannelId) openSocket(profileId, tokenIndex);
+          loadUserServers();
+        } else {
+          t.connected = false;
+          t.error = true;
+          t.username = null;
+          t.avatar = null;
+          appendSystemMessage(`❌ Token ${tokenIndex + 1} invalide.`);
+        }
+      } catch (err) {
+        t.connected = false;
+        t.error = true;
+        t.avatar = null;
+        appendSystemMessage(`❌ Erreur: ${err.message}`);
+      }
+      saveProfiles();
+      renderProfiles();
+      updateTokenSelect();
+    }
+
+    function deleteToken(profileId, tokenIndex) {
+      const profile = profiles.find(p => p.id === profileId);
+      if (!profile) return;
+      const key = profileId + '_' + tokenIndex;
+      closeSocket(key);
+      profile.tokens.splice(tokenIndex, 1);
+      rebuildSocketKeys(profileId);
+      saveProfiles();
+      renderProfiles();
+      updateTokenSelect();
+    }
+
+    function deleteProfile(profileId) {
+      if (!confirm('Supprimer ce profil et ses tokens ?')) return;
+      Object.keys(sockets)
+        .filter(k => k.startsWith(profileId + '_'))
+        .forEach(closeSocket);
+      profiles = profiles.filter(p => p.id !== profileId);
+      if (activeProfileId === profileId) {
+        activeProfileId = null;
+        localStorage.removeItem('yuzu_active_profile');
+      }
+      saveProfiles();
+      renderProfiles();
+      updateTokenSelect();
+    }
+
+    function activateProfile(profileId) {
+      activeProfileId = profileId;
+      localStorage.setItem('yuzu_active_profile', profileId);
+      renderProfiles();
+      document.getElementById('inputArea').style.display = 'block';
+    }
+
+    function saveProfiles() {
+      localStorage.setItem('yuzu_profiles', JSON.stringify(profiles));
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // VICTIM ID
+    // ═══════════════════════════════════════════════════════════════════
+    function saveVictimId() {
+      victimId = document.getElementById('victimIdInput').value.trim();
+      localStorage.setItem('yuzu_victim_id', victimId);
+      appendSystemMessage(`✅ ID victime enregistré: ${victimId}`);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // TOKEN SELECT
+    // ═══════════════════════════════════════════════════════════════════
+    function updateTokenSelect() {
+      const select = document.getElementById('tokenSelect');
+      const prev = select.value;
+      select.innerHTML = '<option value="all">Tous les tokens connectés</option>';
+      profiles.forEach(profile => {
+        (profile.tokens || []).forEach((t, i) => {
+          if (!t.connected) return;
+          const opt = document.createElement('option');
+          opt.value = profile.id + '_' + i;
+          opt.textContent = `${profile.name} / ${t.username || 'Token ' + (i + 1)}`;
+          select.appendChild(opt);
+        });
+      });
+      if (prev) select.value = prev;
+      if (!select.value) select.value = 'all';
+    }
+
+    function updateActiveToken() {
+      selectedTokenMode = document.getElementById('tokenSelect').value;
+      localStorage.setItem('yuzu_token_mode', selectedTokenMode);
+      updateActiveTokensRow();
+    }
+
+    function updateActiveTokensRow() {
+      const row = document.getElementById('activeTokensRow');
+      const tokensToShow = getTokensForSend();
+      if (!tokensToShow.length || !currentChannelId) {
+        row.style.display = 'none';
+        return;
+      }
+      row.style.display = 'flex';
+      row.innerHTML = '';
+      tokensToShow.forEach(({ key, username }) => {
+        const ws = sockets[key];
+        const cls = ws ? (ws.identified ? 'ws-on' : 'ws-err') : '';
+        const chip = document.createElement('div');
+        chip.className = `active-token-chip ${cls}`;
+        chip.innerHTML = `<span class="dot ${ws && ws.identified ? 'on' : ws ? 'err' : ''}"></span>${escapeHtml(username)}`;
+        row.appendChild(chip);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // CHANNEL LOADING
+    // ═══════════════════════════════════════════════════════════════════
+    async function loadChannel() {
+      const channelId = document.getElementById('channelIdInput').value.trim();
+      if (!channelId) {
+        appendSystemMessage('❌ ID de salon requis.');
+        return;
+      }
+
+      currentChannelId = channelId;
+      document.getElementById('channelName').textContent = `#${channelId.substring(0, 8)}…`;
+      document.getElementById('channelDesc').textContent = '— salon chargé';
+      document.getElementById('messageInput').placeholder = `message dans #${channelId.substring(0, 8)}…`;
+      document.getElementById('chatArea').innerHTML = '';
+      document.getElementById('inputArea').style.display = 'block';
+      document.getElementById('whileToolbarBtn').style.display = 'flex';
+      document.getElementById('ragebaitToolbarBtn').style.display = 'flex';
+      appendSystemMessage(`Salon chargé: ${channelId}`);
+
+      Object.keys(sockets).forEach(closeSocket);
+
+      profiles.forEach(profile => {
+        (profile.tokens || []).forEach((t, i) => {
+          if (t.connected) openSocket(profile.id, i);
+        });
+      });
+
+      await fetchChannelInfo(channelId);
+    }
+
+    async function fetchChannelInfo(channelId) {
+      const tokens = getAllConnectedTokens();
+      if (!tokens.length) return;
+
+      try {
+        const res = await fetch(`${API}/channels/${channelId}`, {
+          headers: { Authorization: tokens[0].token }
+        });
+        if (res.ok) {
+          const channel = await res.json();
+          currentGuildId = channel.guild_id;
+          document.getElementById('channelName').textContent = `#${channel.name}`;
+          document.getElementById('channelDesc').textContent = channel.topic || '—';
+
+          if (currentGuildId) {
+            const guildRes = await fetch(`${API}/guilds/${currentGuildId}`, {
+              headers: { Authorization: tokens[0].token }
+            });
+            if (guildRes.ok) {
+              const guild = await guildRes.json();
+              currentGuildName = guild.name;
+              currentGuildIcon = guild.icon ? `https://cdn.discordapp.com/icons/${currentGuildId}/${guild.icon}.png?size=64` : null;
+              updateServerInfo();
+            }
+          }
+        } else {
+          appendSystemMessage(`⚠️ Impossible de récupérer les infos du salon: ${res.status}`);
+        }
+      } catch (err) {
+        appendSystemMessage(`❌ Erreur lors de la récupération des infos du salon: ${err.message}`);
+      }
+    }
+
+    function updateServerInfo() {
+      const serverAvatar = document.getElementById('serverAvatar');
+      const serverName = document.getElementById('serverName');
+
+      if (currentGuildIcon) {
+        serverAvatar.innerHTML = `<img src="${currentGuildIcon}" alt="" />`;
+      } else {
+        serverAvatar.textContent = currentGuildName ? currentGuildName.charAt(0).toUpperCase() : 'Y';
+      }
+      serverName.textContent = currentGuildName || 'Yuzu';
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // WEBSOCKET
+    // ═══════════════════════════════════════════════════════════════════
+    function openSocket(profileId, tokenIndex) {
+      const key = profileId + '_' + tokenIndex;
+      const profile = profiles.find(p => p.id === profileId);
+      if (!profile) return;
+      const t = profile.tokens[tokenIndex];
+      if (!t || !t.connected) return;
+
+      if (sockets[key]) closeSocket(key);
+
+      const entry = {
+        socket: null,
+        heartbeatTimer: null,
+        guildId: null,
+        seq: null,
+        identified: false,
+        reconnectTimer: null,
+        reconnectAttempts: 0
+      };
+      sockets[key] = entry;
+
+      const username = t.username || `Token ${tokenIndex + 1}`;
+
+      function connect() {
+        try {
+          const ws = new WebSocket(WS_URL);
+          entry.socket = ws;
+
+          ws.onopen = () => {
+            entry.reconnectAttempts = 0;
+            appendSystemMessage(`✅ WS ouvert: ${username}`);
+            updateActiveTokensRow();
+          };
+
+          ws.onmessage = ({ data }) => {
+            let msg;
+            try {
+              msg = JSON.parse(data);
+            } catch {
+              return;
+            }
+            const { op, t: evtType, d, s } = msg;
+            if (s !== null && s !== undefined) entry.seq = s;
+
+            switch (op) {
+              case 10: {
+                const interval = d.heartbeat_interval;
+                if (ws.readyState === WebSocket.OPEN) {
+                  ws.send(JSON.stringify({ op: 1, d: entry.seq }));
+                }
+                entry.heartbeatTimer = setInterval(() => {
+                  if (ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({ op: 1, d: entry.seq }));
                   }
-                  appendMessage({
-                    username:  d.author.username + (d.author.discriminator && d.author.discriminator !== '0' ? '#' + d.author.discriminator : ''),
-                    content:   d.content,
-                    timestamp: new Date(d.timestamp),
-                    avatar:    d.author.avatar ? `https://cdn.discordapp.com/avatars/${d.author.id}/${d.author.avatar}.png?size=64` : null
-                  });
+                }, interval);
+                ws.send(
+                  JSON.stringify({
+                    op: 2,
+                    d: {
+                      token: t.token,
+                      intents: 4609,
+                      properties: { os: 'linux', browser: 'yuzu', device: 'yuzu' }
+                    }
+                  })
+                );
+                break;
+              }
+              case 0: {
+                switch (evtType) {
+                  case 'READY':
+                    entry.identified = true;
+                    updateActiveTokensRow();
+                    appendSystemMessage(`✅ Identifié: ${d.user.username}`);
+                    break;
+                  case 'GUILD_CREATE':
+                    entry.guildId = d.id;
+                    break;
+                  case 'MESSAGE_CREATE':
+                    if (d.channel_id !== currentChannelId) break;
+                    if (!seenMessageIds.has(d.id)) {
+                      seenMessageIds.add(d.id);
+                      if (seenMessageIds.size > 500) {
+                        const first = seenMessageIds.values().next().value;
+                        seenMessageIds.delete(first);
+                      }
+                      appendMessage({
+                        username: d.author.username + (d.author.discriminator && d.author.discriminator !== '0' ? '#' + d.author.discriminator : ''),
+                        content: d.content,
+                        timestamp: new Date(d.timestamp),
+                        avatar: d.author.avatar ? `https://cdn.discordapp.com/avatars/${d.author.id}/${d.author.avatar}.png?size=64` : null
+                      });
+                    }
+                    if (rageBaitActive && rageBaitConfig.targetId && d.author.id === rageBaitConfig.targetId && entry.identified) {
+                      const uname = d.author.username;
+                      const m1 = (rageBaitConfig.message1 || '').replace('@pseudo', uname);
+                      const m2 = (rageBaitConfig.message2 || '').replace('@pseudo', uname);
+                      const msg2send = rageBaitMessageIndex % 2 === 0 ? m1 : m2;
+                      sendRageBaitMessage(msg2send, rageBaitMessageIndex % 2 === 0, d.id, entry.guildId);
+                      addRageBaitLog();
+                      rageBaitMessageIndex++;
+                    }
+                    break;
                 }
-                // RageBait
-                if (rageBaitActive && rageBaitConfig.targetId && d.author.id === rageBaitConfig.targetId && entry.identified) {
-                  const uname = d.author.username;
-                  const m1    = (rageBaitConfig.message1 || '').replace('@pseudo', uname);
-                  const m2    = (rageBaitConfig.message2 || '').replace('@pseudo', uname);
-                  const msg2send = rageBaitMessageIndex % 2 === 0 ? m1 : m2;
-                  const isJoin   = rageBaitMessageIndex % 2 === 0;
-                  sendRageBaitMessage(msg2send, isJoin, d.id, entry.guildId);
-                  addRageBaitLog();
-                  rageBaitMessageIndex++;
-                }
+                break;
+              }
+              case 9:
+                appendSystemMessage(`⚠️ Session invalide (${username})`);
+                entry.identified = false;
                 break;
             }
-            break;
-          }
-          case 9: // Invalid session
-            appendSystemMessage(`⚠️ Session invalide (${username})`);
+          };
+
+          ws.onclose = ({ code }) => {
             entry.identified = false;
-            updateWsStatusList();
-            break;
+            clearInterval(entry.heartbeatTimer);
+            entry.heartbeatTimer = null;
+            updateActiveTokensRow();
+            if (code === 4004 || code === 4014) return;
+            if (entry.reconnectAttempts < 5 && currentChannelId) {
+              entry.reconnectAttempts++;
+              appendSystemMessage(`↺ Reconnexion ${username} (${entry.reconnectAttempts}/5)…`);
+              entry.reconnectTimer = setTimeout(connect, Math.min(5000 * entry.reconnectAttempts, 30000));
+            } else {
+              appendSystemMessage(`❌ Reconnexion abandonnée: ${username}`);
+            }
+          };
+
+          ws.onerror = () => appendSystemMessage(`❌ Erreur WS: ${username}`);
+        } catch (err) {
+          appendSystemMessage(`❌ Impossible d'ouvrir WS (${username}): ${err.message}`);
         }
-      };
+      }
 
-      ws.onclose = ({ code }) => {
-        entry.identified = false;
-        clearInterval(entry.heartbeatTimer);
-        entry.heartbeatTimer = null;
-        updateWsStatusList(); updateActiveTokensRow();
-        if (code === 4004) { appendSystemMessage(`❌ Token invalide: ${username}`); return; }
-        if (code === 4014) { appendSystemMessage(`❌ Intents non autorisés: ${username}`); return; }
-        if (entry.reconnectAttempts < 5 && currentChannelId) {
-          entry.reconnectAttempts++;
-          appendSystemMessage(`↺ Reconnexion ${username} (${entry.reconnectAttempts}/5)…`);
-          entry.reconnectTimer = setTimeout(connect, Math.min(5000 * entry.reconnectAttempts, 30000));
-        } else {
-          appendSystemMessage(`❌ Reconnexion abandonnée: ${username}`);
-        }
-      };
-
-      ws.onerror = () => appendSystemMessage(`❌ Erreur WS: ${username}`);
-    } catch (err) {
-      appendSystemMessage(`❌ Impossible d'ouvrir WS (${username}): ${err.message}`);
+      connect();
     }
-  }
 
-  connect();
-}
-
-function closeSocket(key) {
-  const entry = sockets[key];
-  if (!entry) return;
-  clearInterval(entry.heartbeatTimer);
-  clearTimeout(entry.reconnectTimer);
-  if (entry.socket) { try { entry.socket.onclose = null; entry.socket.close(); } catch {} }
-  delete sockets[key];
-  updateWsStatusList(); updateActiveTokensRow();
-}
-
-// When a token is deleted, socket keys for that profile shift — rebuild
-function rebuildSocketKeys(profileId) {
-  const keysToClose = Object.keys(sockets).filter(k => k.startsWith(profileId + '_'));
-  keysToClose.forEach(closeSocket);
-  if (currentChannelId) {
-    const profile = profiles.find(p => p.id === profileId);
-    if (profile) {
-      (profile.tokens || []).forEach((t, i) => { if (t.connected) openSocket(profileId, i); });
-    }
-  }
-}
-
-// Message dedup set (for multi-socket)
-const seenMessageIds = new Set();
-
-function updateWsStatusList() {
-  const list = document.getElementById('wsStatusList');
-  let html = '<div style="font-size:.65rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">WebSockets</div>';
-  const keys = Object.keys(sockets);
-  if (!keys.length) {
-    html += '<div style="font-size:.65rem;color:var(--text-dim);">Aucun socket actif</div>';
-  } else {
-    keys.forEach(key => {
+    function closeSocket(key) {
       const entry = sockets[key];
-      const [profileId, ...rest] = key.split('_');
-      const idx = parseInt(rest.join('_'));
-      const profile = profiles.find(p => p.id === profileId);
-      const t = profile?.tokens?.[idx];
-      const name = t?.username || `Token ${idx + 1}`;
-      const cls  = entry.identified ? 'connected' : 'connecting';
-      const label = entry.identified ? 'connecté' : 'en cours…';
-      html += `<div class="ws-status-item"><span class="status-dot ${cls}"></span>${escapeHtml(name)} — ${label}</div>`;
-    });
-  }
-  list.innerHTML = html;
-}
+      if (!entry) return;
+      clearInterval(entry.heartbeatTimer);
+      clearTimeout(entry.reconnectTimer);
+      if (entry.socket) {
+        try {
+          entry.socket.onclose = null;
+          entry.socket.onerror = null;
+          entry.socket.close();
+        } catch (e) {}
+      }
+      delete sockets[key];
+      updateActiveTokensRow();
+    }
 
-// ═══════════════════════════════════════════════════════════════════
-// MESSAGING
-// ═══════════════════════════════════════════════════════════════════
-
-// Returns list of { key, token, username, avatar } to use for sending
-function getTokensForSend() {
-  const mode = document.getElementById('tokenSelect').value;
-  const result = [];
-  if (mode === 'all') {
-    profiles.forEach(profile => {
-      (profile.tokens || []).forEach((t, i) => {
-        if (t.connected) result.push({ key: profile.id + '_' + i, token: t.token, username: t.username || `Token ${i+1}`, avatar: t.avatar });
-      });
-    });
-  } else {
-    // mode is "profileId_idx" but profileId can contain underscores
-    // So we match against known profile IDs
-    const found = findTokenByKey(mode);
-    if (found) result.push(found);
-  }
-  return result;
-}
-
-function findTokenByKey(key) {
-  for (const profile of profiles) {
-    const tokens = profile.tokens || [];
-    for (let i = 0; i < tokens.length; i++) {
-      if (profile.id + '_' + i === key && tokens[i].connected) {
-        return { key, token: tokens[i].token, username: tokens[i].username || `Token ${i+1}`, avatar: tokens[i].avatar };
+    function rebuildSocketKeys(profileId) {
+      const keysToClose = Object.keys(sockets).filter(k => k.startsWith(profileId + '_'));
+      keysToClose.forEach(closeSocket);
+      if (currentChannelId) {
+        const profile = profiles.find(p => p.id === profileId);
+        if (profile) {
+          (profile.tokens || []).forEach((t, i) => {
+            if (t.connected) openSocket(profileId, i);
+          });
+        }
       }
     }
-  }
-  return null;
-}
 
-async function sendMessage() {
-  const input   = document.getElementById('messageInput');
-  const content = input.value.trim();
-  if (!content || !currentChannelId) return;
+    const seenMessageIds = new Set();
 
-  const tokens = getTokensForSend();
-  if (!tokens.length) { appendSystemMessage('❌ Aucun token connecté.'); return; }
-
-  const finalContent = mentionEveryone ? '@everyone ' + content : content;
-
-  if (!whileModeActive) { input.value = ''; autoResize(input); }
-
-  for (const { token, username, avatar } of tokens) {
-    try {
-      const res = await fetch(`${API}/channels/${currentChannelId}/messages`, {
-        method: 'POST',
-        headers: { Authorization: token, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: finalContent })
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        appendSystemMessage(`❌ ${username}: ${err.message || res.statusText}`);
+    // ═══════════════════════════════════════════════════════════════════
+    // MESSAGING
+    // ═══════════════════════════════════════════════════════════════════
+    function getTokensForSend() {
+      const mode = document.getElementById('tokenSelect').value;
+      const result = [];
+      if (mode === 'all') {
+        profiles.forEach(profile => {
+          (profile.tokens || []).forEach((t, i) => {
+            if (t.connected) result.push({ key: profile.id + '_' + i, token: t.token, username: t.username || `Token ${i + 1}`, avatar: t.avatar });
+          });
+        });
+      } else {
+        const found = findTokenByKey(mode);
+        if (found) result.push(found);
       }
-    } catch (err) {
-      appendSystemMessage(`❌ ${username}: ${err.message}`);
+      return result;
     }
-  }
-}
 
-async function sendRageBaitMessage(message, isJoin, replyToId, guildId) {
-  if (!currentChannelId) return;
-  const tokens = getAllConnectedTokens();
-  if (!tokens.length) { appendSystemMessage('❌ Aucun token pour RageBait.'); return; }
-
-  const body = { content: message };
-  if (replyToId) {
-    body.message_reference = { message_id: replyToId, channel_id: currentChannelId };
-    if (guildId) body.message_reference.guild_id = guildId;
-  }
-
-  for (const { token, username } of tokens) {
-    try {
-      const res = await fetch(`${API}/channels/${currentChannelId}/messages`, {
-        method: 'POST',
-        headers: { Authorization: token, 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        appendSystemMessage(`❌ RageBait (${username}): ${err.message || res.statusText}`);
+    function findTokenByKey(key) {
+      for (const profile of profiles) {
+        const tokens = profile.tokens || [];
+        for (let i = 0; i < tokens.length; i++) {
+          if (profile.id + '_' + i === key && tokens[i].connected) {
+            return { key, token: tokens[i].token, username: tokens[i].username || `Token ${i + 1}`, avatar: tokens[i].avatar };
+          }
+        }
       }
-    } catch (err) {
-      appendSystemMessage(`❌ RageBait (${username}): ${err.message}`);
+      return null;
     }
-  }
-}
 
-function getAllConnectedTokens() {
-  const result = [];
-  profiles.forEach(profile => {
-    (profile.tokens || []).forEach((t, i) => {
-      if (t.connected) result.push({ token: t.token, username: t.username || `Token ${i+1}`, avatar: t.avatar });
+    async function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const content = input.value.trim();
+      if (!content || !currentChannelId) return;
+
+      const tokens = getTokensForSend();
+      if (!tokens.length) {
+        appendSystemMessage('❌ Aucun token connecté.');
+        return;
+      }
+
+      const messages = content.split(',').map(msg => msg.trim()).filter(msg => msg.length > 0);
+      if (messages.length === 0) return;
+
+      if (!whileModeActive) {
+        input.value = '';
+        autoResize(input);
+      }
+
+      for (const msg of messages) {
+        const color = getNextColor();
+        let finalContent = mentionEveryone ? '@everyone ' + msg : msg;
+
+        if (colorModeActive && color.code) {
+          finalContent = `\`\`\`${color.code}\n${color.prefix}${finalContent}${color.suffix}\n\`\`\``;
+        }
+
+        if (victimId) {
+          finalContent += ` <@${victimId}>`;
+        }
+
+        for (const { token, username } of tokens) {
+          try {
+            const res = await fetch(`${API}/channels/${currentChannelId}/messages`, {
+              method: 'POST',
+              headers: { Authorization: token, 'Content-Type': 'application/json' },
+              body: JSON.stringify({ content: finalContent })
+            });
+            if (!res.ok) {
+              const err = await res.json().catch(() => ({}));
+              appendSystemMessage(`❌ ${username}: ${err.message || res.statusText}`);
+            }
+          } catch (err) {
+            appendSystemMessage(`❌ ${username}: ${err.message}`);
+          }
+        }
+      }
+    }
+
+    async function sendRageBaitMessage(message, isJoin, replyToId, guildId) {
+      if (!currentChannelId) return;
+      const tokens = getAllConnectedTokens();
+      if (!tokens.length) {
+        appendSystemMessage('❌ Aucun token pour RageBait.');
+        return;
+      }
+
+      const body = { content: message };
+      if (replyToId) {
+        body.message_reference = { message_id: replyToId, channel_id: currentChannelId };
+        if (guildId) body.message_reference.guild_id = guildId;
+      }
+
+      for (const { token, username } of tokens) {
+        try {
+          const res = await fetch(`${API}/channels/${currentChannelId}/messages`, {
+            method: 'POST',
+            headers: { Authorization: token, 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+          });
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            appendSystemMessage(`❌ RageBait (${username}): ${err.message || res.statusText}`);
+          }
+        } catch (err) {
+          appendSystemMessage(`❌ RageBait (${username}): ${err.message}`);
+        }
+      }
+    }
+
+    function getAllConnectedTokens() {
+      const result = [];
+      profiles.forEach(profile => {
+        (profile.tokens || []).forEach((t, i) => {
+          if (t.connected) result.push({ token: t.token, username: t.username || `Token ${i + 1}`, avatar: t.avatar });
+        });
+      });
+      return result;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // WHILE LOOP
+    // ═══════════════════════════════════════════════════════════════════
+    function toggleWhileMode() {
+      if (whileModeActive) {
+        stopWhileLoop();
+      }
+      whileModeActive = !whileModeActive;
+      if (whileModeActive) {
+        document.getElementById('whileToggle').classList.add('active');
+        document.getElementById('whileButton').textContent = 'Arrêter la boucle';
+        document.getElementById('whileToolbarBtn').textContent = '⏹️ Arrêter';
+        document.getElementById('whileToolbarBtn').classList.add('while-active');
+        startWhileLoop();
+      } else {
+        document.getElementById('whileToggle').classList.remove('active');
+        document.getElementById('whileButton').textContent = 'Démarrer la boucle';
+        document.getElementById('whileToolbarBtn').textContent = '⏹️ While';
+        document.getElementById('whileToolbarBtn').classList.remove('while-active');
+      }
+    }
+
+    function startWhileLoop() {
+      stopWhileLoop();
+      whileInterval = setInterval(() => {
+        const content = document.getElementById('messageInput').value.trim();
+        if (content && currentChannelId) sendMessage();
+        else if (!content) appendSystemMessage('⚠️ Boucle: message vide, en attente…');
+      }, whileDelay);
+    }
+
+    function stopWhileLoop() {
+      if (whileInterval) {
+        clearInterval(whileInterval);
+        whileInterval = null;
+      }
+    }
+
+    function updateDelay(value) {
+      whileDelay = parseInt(value);
+      document.getElementById('delayValue').textContent = value;
+      if (whileModeActive) {
+        stopWhileLoop();
+        startWhileLoop();
+      }
+    }
+
+    function updateWhileButton() {
+      document.getElementById('whileButton').textContent = whileModeActive ? 'Arrêter la boucle' : 'Démarrer la boucle';
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // CHAT UI
+    // ═══════════════════════════════════════════════════════════════════
+    function appendMessage({ username, content, timestamp, avatar }) {
+      const chatArea = document.getElementById('chatArea');
+      const welcome = chatArea.querySelector('.chat-welcome');
+      if (welcome) welcome.remove();
+
+      const div = document.createElement('div');
+      div.className = 'message';
+      const time = timestamp ? new Date(timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '';
+      const avatarHtml = avatar ? `<img src="${escapeHtml(avatar)}" alt="" />` : escapeHtml((username || '?').charAt(0).toUpperCase());
+
+      div.innerHTML = `
+        <div class="message-avatar">${avatarHtml}</div>
+        <div class="message-content">
+          <div class="message-header">
+            <span class="message-author">${escapeHtml(username || '?')}</span>
+            <span class="message-time">${time}</span>
+          </div>
+          <div class="message-text">${escapeHtml(content || '')}</div>
+        </div>`;
+      chatArea.appendChild(div);
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    function appendSystemMessage(text) {
+      const chatArea = document.getElementById('chatArea');
+      const welcome = chatArea.querySelector('.chat-welcome');
+      if (welcome) welcome.remove();
+      const div = document.createElement('div');
+      div.className = 'message-system';
+      div.textContent = text;
+      chatArea.appendChild(div);
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // INPUT HELPERS
+    // ═══════════════════════════════════════════════════════════════════
+    function handleKeyDown(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    }
+
+    function autoResize(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 180) + 'px';
+    }
+
+    function toggleMention() {
+      mentionEveryone = !mentionEveryone;
+      document.getElementById('mentionBtn').classList.toggle('active', mentionEveryone);
+    }
+
+    function insertText(text) {
+      const el = document.getElementById('messageInput');
+      const s = el.selectionStart,
+        e2 = el.selectionEnd;
+      el.value = el.value.substring(0, s) + text + el.value.substring(e2);
+      el.focus();
+      el.setSelectionRange(s + text.length, s + text.length);
+      autoResize(el);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // MODALS
+    // ═══════════════════════════════════════════════════════════════════
+    function openProfileModal() {
+      document.getElementById('profileModal').classList.add('active');
+      document.getElementById('profileNameInput').focus();
+    }
+
+    function closeProfileModal() {
+      document.getElementById('profileModal').classList.remove('active');
+      ['profileNameInput', 'profileAvatarInput', 'tokenInput'].forEach(id => (document.getElementById(id).value = ''));
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // UTILS
+    // ═══════════════════════════════════════════════════════════════════
+    function escapeHtml(text) {
+      const d = document.createElement('div');
+      d.textContent = String(text ?? '');
+      return d.innerHTML;
+    }
+
+    function closeRageBaitModal() {
+      document.getElementById('ragebaitModal').classList.remove('active');
+    }
+
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+      o.addEventListener('click', e => {
+        if (e.target === o) o.classList.remove('active');
+      });
     });
-  });
-  return result;
-}
 
-// ─── While Loop ──────────────────────────────────────────────────
-function toggleWhileMode() {
-  whileModeActive = !whileModeActive;
-  if (whileModeActive) {
-    document.getElementById('whileToggle').classList.add('active');
-    document.getElementById('whileButton').textContent     = 'Arrêter la boucle';
-    document.getElementById('whileToolbarBtn').textContent = '⏹️ Arrêter';
-    document.getElementById('whileToolbarBtn').classList.add('while-active');
-    startWhileLoop();
-  } else {
-    document.getElementById('whileToggle').classList.remove('active');
-    document.getElementById('whileButton').textContent     = 'Démarrer la boucle';
-    document.getElementById('whileToolbarBtn').textContent = '⏹️ While';
-    document.getElementById('whileToolbarBtn').classList.remove('while-active');
-    stopWhileLoop();
-  }
-}
-function startWhileLoop() {
-  stopWhileLoop();
-  whileInterval = setInterval(() => {
-    const content = document.getElementById('messageInput').value.trim();
-    if (content && currentChannelId) sendMessage();
-    else if (!content) appendSystemMessage('⚠️ Boucle: message vide, en attente…');
-  }, whileDelay);
-}
-function stopWhileLoop() { if (whileInterval) { clearInterval(whileInterval); whileInterval = null; } }
-function updateDelay(value) {
-  whileDelay = parseInt(value);
-  document.getElementById('delayValue').textContent = value;
-  if (whileModeActive) { stopWhileLoop(); startWhileLoop(); }
-}
-function updateWhileButton() {
-  document.getElementById('whileButton').textContent = whileModeActive ? 'Arrêter la boucle' : 'Démarrer la boucle';
-}
-
-// ═══════════════════════════════════════════════════════════════════
-// RAGEBAIT
-// ═══════════════════════════════════════════════════════════════════
-function openRageBaitModal() {
-  document.getElementById('ragebaitModal').classList.add('active');
-  document.getElementById('ragebaitTargetIdInput').value  = rageBaitConfig.targetId  || '';
-  document.getElementById('ragebaitMessage1Input').value  = rageBaitConfig.message1  || '@pseudo a rejoint le chat';
-  document.getElementById('ragebaitMessage2Input').value  = rageBaitConfig.message2  || '@pseudo a quitté le chat';
-}
-function closeRageBaitModal() { document.getElementById('ragebaitModal').classList.remove('active'); }
-
-function saveRageBaitConfig() {
-  const targetId = document.getElementById('ragebaitTargetIdInput').value.trim();
-  const message1 = document.getElementById('ragebaitMessage1Input').value.trim();
-  const message2 = document.getElementById('ragebaitMessage2Input').value.trim();
-  if (!targetId || !message1 || !message2) { appendSystemMessage('❌ Tous les champs RageBait sont requis.'); return; }
-  rageBaitConfig = { targetId, message1, message2 };
-  localStorage.setItem('yuzu_ragebait_config', JSON.stringify(rageBaitConfig));
-  closeRageBaitModal();
-  appendSystemMessage(`✅ RageBait configuré pour l'ID: ${targetId}`);
-  updateRageBaitStatus();
-}
-function loadRageBaitConfig() {
-  const c = JSON.parse(localStorage.getItem('yuzu_ragebait_config') || '{}');
-  if (c.targetId && c.message1 && c.message2) { rageBaitConfig = c; updateRageBaitStatus(); }
-}
-function toggleRageBait() {
-  if (!rageBaitConfig.targetId) { openRageBaitModal(); return; }
-  rageBaitActive = !rageBaitActive;
-  rageBaitMessageIndex = 0;
-  appendSystemMessage(rageBaitActive ? `✅ RageBait activé (cible: ${rageBaitConfig.targetId})` : '❌ RageBait désactivé');
-  updateRageBaitStatus();
-}
-function updateRageBaitStatus() {
-  const status  = document.getElementById('ragebaitStatus');
-  const btn     = document.getElementById('ragebaitToggleBtn');
-  const toolBtn = document.getElementById('ragebaitToolbarBtn');
-  if (rageBaitActive) {
-    status.textContent = 'Actif'; status.classList.add('active');
-    btn.textContent = 'Désactiver RageBait';
-    toolBtn.classList.add('ragebait-active'); toolBtn.textContent = '🎣 Arrêter';
-  } else {
-    status.textContent = rageBaitConfig.targetId ? 'Configuré' : 'Inactif';
-    status.classList.remove('active');
-    btn.textContent = 'Activer RageBait';
-    toolBtn.classList.remove('ragebait-active'); toolBtn.textContent = '🎣 RageBait';
-  }
-}
-function addRageBaitLog() {
-  rageBaitLogs.unshift({ ts: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) });
-  if (rageBaitLogs.length > 30) rageBaitLogs.pop();
-  localStorage.setItem('yuzu_ragebait_logs', JSON.stringify(rageBaitLogs));
-  renderRageBaitLogs();
-}
-function renderRageBaitLogs() {
-  const c = document.getElementById('ragebaitLogs');
-  c.innerHTML = rageBaitLogs.map(l => `<div class="ragebait-log">Message envoyé • ${l.ts}</div>`).join('');
-}
-function clearRageBaitLogs() { rageBaitLogs = []; localStorage.setItem('yuzu_ragebait_logs', '[]'); renderRageBaitLogs(); }
-
-// ═══════════════════════════════════════════════════════════════════
-// CHAT UI
-// ═══════════════════════════════════════════════════════════════════
-function appendMessage({ username, content, timestamp, avatar }) {
-  const chatArea = document.getElementById('chatArea');
-  const welcome  = chatArea.querySelector('.chat-welcome');
-  if (welcome) welcome.remove();
-
-  const div  = document.createElement('div');
-  div.className = 'message';
-  const time = timestamp ? new Date(timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '';
-  const avatarHtml = avatar ? `<img src="${escapeHtml(avatar)}" alt="" />` : escapeHtml((username || '?').charAt(0).toUpperCase());
-
-  div.innerHTML = `
-    <div class="message-avatar">${avatarHtml}</div>
-    <div class="message-content">
-      <div class="message-header">
-        <span class="message-author">${escapeHtml(username || '?')}</span>
-        <span class="message-time">${time}</span>
-      </div>
-      <div class="message-text">${escapeHtml(content || '')}</div>
-    </div>`;
-  chatArea.appendChild(div);
-  chatArea.scrollTop = chatArea.scrollHeight;
-}
-
-function appendSystemMessage(text) {
-  const chatArea = document.getElementById('chatArea');
-  const welcome  = chatArea.querySelector('.chat-welcome');
-  if (welcome) welcome.remove();
-  const div = document.createElement('div');
-  div.className = 'message-system';
-  div.textContent = text;
-  chatArea.appendChild(div);
-  chatArea.scrollTop = chatArea.scrollHeight;
-}
-
-// ═══════════════════════════════════════════════════════════════════
-// JOIN SERVER
-// ═══════════════════════════════════════════════════════════════════
-async function joinServer() {
-  let code = document.getElementById('inviteInput').value.trim();
-  if (!code) { appendSystemMessage('❌ Lien requis.'); return; }
-  if (code.includes('discord.gg/'))         code = code.split('discord.gg/').pop();
-  else if (code.includes('discord.com/invite/')) code = code.split('discord.com/invite/').pop();
-  code = code.split('?')[0];
-
-  const tokens = getAllConnectedTokens();
-  if (!tokens.length) { appendSystemMessage('❌ Aucun token connecté.'); return; }
-  appendSystemMessage(`↺ Rejoindre avec ${tokens.length} token(s)…`);
-
-  for (const { token, username } of tokens) {
-    try {
-      const res = await fetch(`${API}/invites/${code}`, { method: 'POST', headers: { Authorization: token, 'Content-Type': 'application/json' } });
-      appendSystemMessage(res.ok || res.status === 304 ? `✅ ${username} a rejoint.` : `❌ ${username}: erreur ${res.status}`);
-    } catch (err) { appendSystemMessage(`❌ ${username}: ${err.message}`); }
-  }
-  closeInviteModal();
-}
-
-// ═══════════════════════════════════════════════════════════════════
-// INPUT HELPERS
-// ═══════════════════════════════════════════════════════════════════
-function handleKeyDown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
-function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 180) + 'px'; }
-function toggleMention() { mentionEveryone = !mentionEveryone; document.getElementById('mentionBtn').classList.toggle('active', mentionEveryone); }
-function insertText(text) {
-  const el = document.getElementById('messageInput');
-  const s = el.selectionStart, e2 = el.selectionEnd;
-  el.value = el.value.substring(0, s) + text + el.value.substring(e2);
-  el.focus(); el.setSelectionRange(s + text.length, s + text.length); autoResize(el);
-}
-
-// ═══════════════════════════════════════════════════════════════════
-// MODALS
-// ═══════════════════════════════════════════════════════════════════
-function openProfileModal()  { document.getElementById('profileModal').classList.add('active'); document.getElementById('profileNameInput').focus(); }
-function closeProfileModal() {
-  document.getElementById('profileModal').classList.remove('active');
-  ['profileNameInput','profileAvatarInput','tokenInput'].forEach(id => document.getElementById(id).value = '');
-}
-function openInviteModal()   { document.getElementById('inviteModal').classList.add('active'); }
-function closeInviteModal()  { document.getElementById('inviteModal').classList.remove('active'); document.getElementById('inviteInput').value = ''; }
-function toggleSidebar()     { document.getElementById('sidebar').classList.toggle('open'); }
-
-// ═══════════════════════════════════════════════════════════════════
-// UTILS
-// ═══════════════════════════════════════════════════════════════════
-function escapeHtml(text) {
-  const d = document.createElement('div');
-  d.textContent = String(text ?? '');
-  return d.innerHTML;
-}
-
-document.querySelectorAll('.modal-overlay').forEach(o => {
-  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('active'); });
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
-});
-</script>
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+    });
+  </script>
 </body>
 </html>
